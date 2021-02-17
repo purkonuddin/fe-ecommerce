@@ -1,0 +1,85 @@
+@import url(//fonts.googleapis.com/css?family=Open+Sans);
+*{
+  font-family: 'Metropolis';
+  margin: 0;
+  padding: 0;
+  background: #fff;  
+}
+.container-fluid {  
+  height: 100vh; /* Magic here */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}
+
+.btn-link { 
+  color: #db3022;
+  text-decoration: none;
+}
+
+.btn-link:hover {
+  color: #db31228a;
+  text-decoration: underline;
+}
+
+.btn-primary {
+  border-radius: 25px;
+  height: 48px;
+  width: 401px;
+
+  color: #fff;
+  background-color: #db3022;
+  border-color: #db3022;
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #db312296;
+  border-color: #db312296;
+} 
+
+.btn-secondary {
+  color: #fff;
+  background-color: #db3022;
+  border-color: #db3022;
+}
+
+.btn-secondary:hover {
+  color: #db3022;
+  background-color: #ffffff;
+  border-color: #db3022;
+}
+
+.active {
+  color: #db3022;
+  background-color: #ffffff;
+  border-color: #db3022;
+} 
+
+.selected {
+  color: #db3022;
+  background-color: #ffffff;
+  border-color: #db3022;
+} 
+
+/*untuk layar device berukuran kecil*/
+@media screen and (min-width: 400px) { 
+  .btn-primary { 
+    width: 100%; 
+  }
+}
+
+/*untuk layar device berukuran sedang*/
+@media screen and (min-width: 550px) { 
+  .btn-primary { 
+    width: 100%; 
+  }
+}
+
+/*untuk layar device berukuran besar*/
+@media screen and (min-width: 800px) { 
+  .btn-primary { 
+    width: 401px; 
+  }
+}

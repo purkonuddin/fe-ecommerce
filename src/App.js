@@ -126,20 +126,21 @@
 //   );
 // }
 
-import React from "react";
+import React, { Suspense }  from "react";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 // import Product from "./components/product/product";
-// import Login from "./components/auth/login";
+import Login from "./components/auth/login";
 import { store, persistor } from "./redux/store";
-import Home from "./components/home";
+// import Home from "./components/home";
 // import Category from "./components/category/category";
 // import User from "./components/user/user";
 // import Merchant from "./components/merchant/merchant";
 // import History from "./components/history/history";
 import error from "./assets/404.png";
 import { Button } from "react-bootstrap";
+const Home = React.lazy(() => import('./components/home'));
 
 const notFound = () => {
   return (
@@ -160,18 +161,20 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <Router>
-          <Switch>
-            {/* <Route path="/login" component={Login} /> */}
-            <Route exact path="/" component={Home} />
-            {/* <Route path="/product" component={Product} /> */}
-            {/* <Route path="/category" component={Category} /> */}
-            {/* <Route path="/user" component={User} /> */}
-            {/* <Route path="/merchant" component={Merchant} /> */}
-            {/* <Route path="/history" component={History} /> */}
-            <Route component={notFound} />
-          </Switch>
-        </Router>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Router>
+            <Switch>
+              <Route path="/login" component={Login} />
+              <Route exact path="/" component={Home} />
+              {/* <Route path="/product" component={Product} /> */}
+              {/* <Route path="/category" component={Category} /> */}
+              {/* <Route path="/user" component={User} /> */}
+              {/* <Route path="/merchant" component={Merchant} /> */}
+              {/* <Route path="/history" component={History} /> */}
+              <Route component={notFound} />
+            </Switch>
+          </Router>
+        </Suspense>
       </PersistGate>
     </Provider>
   );

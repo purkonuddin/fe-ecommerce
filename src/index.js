@@ -8,6 +8,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+// fonts Metropolis
+import './assets/fonts/Metropolis-Regular.otf'
 
 ReactDOM.render(
   <React.StrictMode>
