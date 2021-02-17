@@ -31,7 +31,7 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      userType:1,
+      userType:'1',
       windowWidth: document.body.clientWidth,
     };
 
@@ -60,6 +60,7 @@ class Login extends Component {
   };
 
   render() {
+    //   const {userType} = this.state;
     return (
       <div 
         className='container-fluid'
@@ -96,7 +97,7 @@ class Login extends Component {
             </div>
 
           <div>
-            <form> 
+            <form>  
                 <div className='form-group' 
                     style={{
                         display: 'flex',
@@ -112,8 +113,9 @@ class Login extends Component {
                             value={radio.value}
                             checked={this.state.userType === radio.value}
                             onChange={this.onChange}
+                            // disabled={userType === radio.value}
                         >
-                        {radio.name + `- ${this.state.userType}`}
+                        {radio.name}
                         </ToggleButton>
                     ))}
                     </ButtonGroup>

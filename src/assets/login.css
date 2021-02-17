@@ -51,10 +51,10 @@
   border-color: #db3022;
 }
 
-.active {
-  color: #db3022;
+.btn-secondary:not(:disabled):not(.disabled).active, .btn-secondary:not(:disabled):not(.disabled):active, .show>.btn-secondary.dropdown-toggle {
+  color: #ced4da;
   background-color: #ffffff;
-  border-color: #db3022;
+  border-color: #ced4da;
 } 
 
 .selected {
@@ -63,8 +63,26 @@
   border-color: #db3022;
 } 
 
+.btn-secondary.disabled, .btn-secondary:disabled {
+  color: #db3022;
+  background-color: #ffffff;
+  border-color: #ced4da;
+}
+
+.btn-secondary.focus, .btn-secondary:focus, .focus {
+  color: #fff;
+  background-color: #db3022;
+  border-color: #db3022;
+  box-shadow: unset;
+}
+
+.btn.focus, .btn:focus {
+  outline: 0;
+  box-shadow: unset;
+}
+
 /*untuk layar device berukuran kecil*/
-@media screen and (min-width: 400px) { 
+@media screen and (min-width: 100px) { 
   .btn-primary { 
     width: 100%; 
   }
