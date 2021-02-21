@@ -37,7 +37,7 @@ export default function (state = initialState, action) {
                 isFulfilled: false,
                 isPending: false,
                 isRegistered: false,
-                isRejected: false,
+                isRejected: true,
                 isResetPassword: false,
                 isSentResetPassword: false,
                 profile: {},
@@ -109,11 +109,11 @@ export default function (state = initialState, action) {
                 isRegistered: false,
                 isRejected: false,
                 isResetPassword: true,
-                isSentResetPassword: true,
+                isSentResetPassword: false,
                 profile: {},
                 rejected: {},
                 resetPassword: action.payload.data.result,
-                sendReset: action.payload.data.result,
+                sendReset: {},
                 signup: {}
             }
         case 'REGISTER_PENDING':
@@ -158,13 +158,13 @@ export default function (state = initialState, action) {
             isPending: false,
             isRegistered: true,
             isRejected: false,
-            isResetPassword: true,
-            isSentResetPassword: true,
+            isResetPassword: false,
+            isSentResetPassword: false,
             profile: {},
             rejected: {},
-            resetPassword: action.payload.data.result,
-            sendReset: action.payload.data.result,
-            signup: action.payload.data.result
+            resetPassword:{},
+            sendReset: {},
+            signup: action.payload.data.result, 
         }
         case 'LOGIN_PENDING':
         return {
