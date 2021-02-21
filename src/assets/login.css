@@ -81,6 +81,18 @@
   box-shadow: unset;
 }
 
+.btn-primary {
+  color: #fff;
+  background-color: #db3022;
+  border-color: #db3022;
+}
+
+.btn-primary.disabled, .btn-primary:disabled {
+  color: #fff;
+  background-color: #db3022;
+  border-color: #db3022;
+}
+
 /*untuk layar device berukuran kecil*/
 @media screen and (min-width: 100px) { 
   .btn-primary { 

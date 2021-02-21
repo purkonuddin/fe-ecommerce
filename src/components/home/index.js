@@ -4,6 +4,20 @@ import Navbar from "../layout/navbar";
 import { CardDeck, Card } from "react-bootstrap";
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+
+    this.mediaQuery = {
+        desktop: 1200,
+        tablet: 768,
+        phone: 576,
+      };
+
+    this.state = { 
+      windowWidth: document.body.clientWidth,
+    };
+  }
+
   componentDidMount() {
     if (!this.props.auth.isAuthenticated) {
       this.props.history.push("/login");
@@ -12,7 +26,13 @@ class Home extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div 
+        className='container-fluid'
+        style={{
+            width: this.state.windowWidth > this.mediaQuery.phone
+              ? '50%'
+              : '100%', 
+          }}> 
         <Navbar />
         <div style={{ marginTop: 30 }}>
           <div className="alert alert-primary" role="alert">

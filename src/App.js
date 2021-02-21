@@ -132,6 +132,9 @@ import { PersistGate } from "redux-persist/integration/react";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 // import Product from "./components/product/product";
 import Login from "./components/auth/login";
+import Register from "./components/auth/register";
+import SendResetPassword from "./components/auth/send_reset_password";
+import ResetPassword from "./components/auth/reset_password";
 import { store, persistor } from "./redux/store";
 // import Home from "./components/home";
 // import Category from "./components/category/category";
@@ -155,7 +158,16 @@ const notFound = () => {
       </div>
     </div>
   );
-};
+}; 
+
+const SearchPage = ({ match, location }) => {
+  return (
+    <p>
+      <strong>Location Props: </strong>
+      {JSON.stringify(location, null, 2)}
+    </p>
+  );
+}
 
 function App() {
   return (
@@ -163,14 +175,18 @@ function App() {
       <PersistGate persistor={persistor}>
         <Suspense fallback={<div>Loading...</div>}>
           <Router>
-            <Switch>
+            <Switch> 
               <Route path="/login" component={Login} />
+              <Route path="/sign-up" component={Register} />
+              <Route path="/send_reset_password" component={SendResetPassword} />
+              <Route path="/reset_password/:token" component={ResetPassword} />
               <Route exact path="/" component={Home} />
               {/* <Route path="/product" component={Product} /> */}
               {/* <Route path="/category" component={Category} /> */}
               {/* <Route path="/user" component={User} /> */}
               {/* <Route path="/merchant" component={Merchant} /> */}
-              {/* <Route path="/history" component={History} /> */}
+              {/* <Route path="/history" component={History} /> */} 
+              <Route exact path="/search" component={SearchPage} />
               <Route component={notFound} />
             </Switch>
           </Router>

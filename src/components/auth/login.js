@@ -1,21 +1,14 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {logo} from '../../assets/properties';
 import { login } from '../../redux/actions/auth';
 import '../../assets/login.css'
 import { Button, ButtonGroup, ToggleButton } from "react-bootstrap";
-import { BrowserRouter as Link } from "react-router-dom";
+import { Link, withRouter } from 'react-router-dom'; 
 
-// import Loadable from 'react-loadable';
-
-// const LoadableLogin = Loadable({
-//     loader: ()=>{<LoginComponent/>},
-//     loading: ()=> {<div>Loading...</div>},
-// }); 
 const radios = [
-    { name: 'Customer', value: '1' },
-    { name: 'Seller', value: '2' }, 
+    { name: 'Customer', value: 'customer' },
+    { name: 'Seller', value: 'seller' }, 
   ];
 
 class Login extends Component {
@@ -29,10 +22,11 @@ class Login extends Component {
       };
 
     this.state = {
-      email: '',
-      password: '',
-      userType:'1',
+      login_email: '',
+      login_password: '',
+      login_account_type:'customer',
       windowWidth: document.body.clientWidth,
+      isSentResetPassword: false
     };
 
 
@@ -41,6 +35,14 @@ class Login extends Component {
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
       this.props.history.push('/');
+    }
+
+    if (this.props.auth.isSentResetPassword) {
+      this.setState({isSentResetPassword: true})
+    }
+
+    if (this.props.auth.isFulfilled && this.props.auth.isResetPassword) {
+      this.setState({login_email: this.props.auth.resetPassword.user_email})
     }
 
     window.addEventListener('resize', () => {
@@ -92,8 +94,22 @@ class Login extends Component {
                 /> 
             </div> 
 
-            <div className='form-group'>
+            <div className='form-group' style={{textAlign: 'center'}}>
                 <p style={{fontSize: '18px', fontWeight: 700}}>Please login with your account</p>
+                {this.state.isSentResetPassword &&
+                  <p style={{fontSize: '12px'}}>we have send an email containing a reset password instruction to your email, please check your email</p>
+                }
+                {this.props.auth.isRegistered && this.props.auth.signup 
+                  ? <p style={{fontSize: '12px'}}>Sign up success, we have send an email containing a verification instruction to your email, please check your email</p>
+                  : null
+                }
+                {this.props.auth.isRejected && 
+                  <p style={{fontSize: '12px', color: '#db3022'}}>{this.props.auth.rejected.message}</p>
+                }
+                {this.props.auth.isFulfilled && this.props.auth.isResetPassword 
+                  ? <p style={{fontSize: '12px', color: 'green'}}>{this.props.auth.resetPassword.message}</p>
+                  : null
+                }
             </div>
 
           <div>
@@ -109,9 +125,9 @@ class Login extends Component {
                             key={idx}
                             type="radio"
                             variant="secondary"
-                            name="userType"
+                            name="login_account_type"
                             value={radio.value}
-                            checked={this.state.userType === radio.value}
+                            checked={this.state.login_account_type === radio.value}
                             onChange={this.onChange}
                             // disabled={userType === radio.value}
                         >
@@ -120,14 +136,16 @@ class Login extends Component {
                     ))}
                     </ButtonGroup>
                 </div>
+                
               <div className='form-group'> 
                 <input
                   type='email'
                   className='form-control'
                   placeholder='Email'
-                  name='email'
+                  name='login_email'
                   onChange={this.onChange}
                   required
+                  value={this.state.login_email || ''}
                 /><br/>
 
                 <div className='form-group'>
@@ -135,13 +153,13 @@ class Login extends Component {
                     type='password'
                     className='form-control'
                     placeholder='Password'
-                    name='password'
+                    name='login_password'
                     onChange={this.onChange}
                   />
                 </div>
 
                 <div className='form-group' style={{textAlign:'right'}}>
-                    <Link to="/forgot-password">
+                    <Link to="/send_reset_password">
                         <Button variant="link">Forgot password?</Button>
                     </Link>
                 </div>
@@ -151,25 +169,19 @@ class Login extends Component {
                   type='submit'
                   className='btn login btn-primary form-group'
                 >
-                  Login
+                  {this.props.auth.isPending ? 'Load...' : 'Login'}
                 </Button>
               </div>
             </form>
           </div>
             <div>
-                <p>Don't have a Blanja account?<span> <Link to="/register"> <Button variant="link">Register</Button> </Link></span> </p> 
+                <p>Don't have a Blanja account?<span> <Link to="/sign-up"> <Button variant="link">register</Button></Link></span> </p> 
             </div>
         </div>
       </div>
     );
   }
-}
-
-// class Login extends React.Component {
-//     render() {
-//       return <LoadableLogin/>;
-//     }
-//   }
+} 
 
 const mapStateToProps = (state) => {
   return {
