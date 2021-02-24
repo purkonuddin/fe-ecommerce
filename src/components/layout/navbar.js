@@ -1,67 +1,87 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Link, withRouter } from "react-router-dom";
+import { connect } from "react-redux"; 
+import { Link, withRouter } from 'react-router-dom'; 
 import { logout } from "../../redux/actions/auth";
+import { FormControl, Form, Navbar, Nav } from "react-bootstrap";
+import {SearchSvg, FilterSvg, ShopingCartSvg, BellSvg, MailSvg, LogoSvg} from '../../assets/properties';
 
-class Navbar extends Component {
+
+class NavbarComp extends Component { 
+
+
   onLogout() {
     this.props.dispatch(logout());
+    // this.props.history.push("/login");
+  }
+
+  onLogin() {
     this.props.history.push("/login");
+  }
+
+  onSignup() {
+    this.props.history.push("/sign-up");
   }
 
   render() {
     return (
-      <nav
-        className="navbar navbar-expand-lg navbar-light"
-        style={{ background: "#e3f2fd" }}
-      >
-        <div className="collapse navbar-collapse">
-          <ul className="navbar-nav">
-            <li className="nav-item active">
-              <a className="nav-link" href="/">
-                <i class="fas fa-home">Home</i>
-                <span className="sr-only">(current)</span>
-              </a>
-            </li>
+      <>
+      <Navbar collapseOnSelect expand="lg" variant="light" bg="light" fixed="top" className="pr-lg-5 pl-lg-5">
+        <Navbar.Brand href="#home">
+          <LogoSvg/>
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Form inline  className="mr-auto ml-auto">
+            <FormControl type="text" placeholder="Search"/>
+            <button className="btn btn-search-svg">
+              <SearchSvg/>
+            </button>  
+            <button className="btn btn-outline-light btn-filter-svg">
+              <FilterSvg/>
+            </button>  
+          </Form> 
+          
+          <Nav>
+            <Nav.Link href="#deets"><ShopingCartSvg/></Nav.Link>
+            {/* <button className="btn"><ShopingCartSvg/></button> */}
 
-            <li className="nav-item ">
-              <a className="nav-link" href="/product">
-                <i className="fas fa-file-invoice"> Product</i>
-              </a>
-            </li>
-            <li className="nav-item ">
-              <a className="nav-link" href="/category">
-                <i className="fa fa-list-alt">Category</i>
-              </a>
-            </li>
-            <li className="nav-item ">
-              <a className="nav-link" href="/history">
-                <i className="fas fa-chart-line">History</i>
-              </a>
-            </li>
-            <li className="nav-item ">
-              <a className="nav-link" href="/user">
-                <i className="fas fa-user-cog">User</i>
-              </a>
-            </li>
-            <li className="nav-item ">
-              <a className="nav-link" href="/merchant">
-                <i class="fas fa-store">Merchant</i>
-              </a>
-            </li>
-            <li className="nav-item ">
-              <Link
-                className="nav-link"
-                id=""
-                onClick={this.onLogout.bind(this)}
-              >
-                <i className="fas fa-sign-out-alt">Logout</i>
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </nav>
+            {this.props.auth.isAuthenticated 
+              ? <>
+                <Nav.Link eventKey={2} href="#memes">
+                  <BellSvg/>
+                </Nav.Link>
+                <Nav.Link href="#"><MailSvg/></Nav.Link>
+                <Link
+                  className="nav-link"
+                  id=""
+                  onClick={this.onLogout.bind(this)}
+                >
+                  Logout
+                </Link>
+                </>
+              : <> 
+                <Link
+                  className="btn btn-secondary btn-block btn-block-nav"
+                  id=""
+                  onClick={this.onLogin.bind(this)}
+                >
+                    Login
+                </Link>
+                <Link
+                  className="btn btn-outline-secondary btn-block-nav"
+                  id=""
+                  onClick={this.onSignup.bind(this)}
+                >
+                    Signup
+                </Link> 
+              </>
+            }   
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+      
+      </>
     );
   }
 }
@@ -71,6 +91,6 @@ const mapStateToProps = (state) => {
     auth: state.auth,
   };
 };
-const Nav = withRouter(Navbar);
+const Navigate = withRouter(NavbarComp);
 
-export default connect(mapStateToProps)(Nav);
+export default connect(mapStateToProps)(Navigate);

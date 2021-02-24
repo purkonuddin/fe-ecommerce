@@ -1,0 +1,23 @@
+.wrap-slide-box {
+    height: 180px;
+    min-width: 455px;
+    display: flex;
+    width: 455px;
+    overflow: hidden;
+    margin-inline: 0.5em;
+    border-radius: 8px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    align-self: center;
+    justify-content: center;
+}
+
+p.p-slide-name {
+    background: unset;
+    align-self: center;
+    font-size: 30px;
+    font-weight: 700;
+    color: #FFFF;
+    line-height: 30px;
+}

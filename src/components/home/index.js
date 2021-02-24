@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Navbar from "../layout/navbar";
-import { CardDeck, Card } from "react-bootstrap";
+import NavbarComp from "../layout/navbar"; 
+import ImageSlider from "../layout/slide"; 
+import CategoryComp from "../layout/category";
+import '../../styles/home.css'
+import { getSlide } from "../../redux/actions/slide";
+import { getCategories } from "../../redux/actions/category";
+
 
 class Home extends Component {
   constructor(props) {
@@ -18,143 +23,29 @@ class Home extends Component {
     };
   }
 
-  componentDidMount() {
-    if (!this.props.auth.isAuthenticated) {
-      this.props.history.push("/login");
-    }
+  componentDidMount = async () => {
+    await this.props.dispatch(getSlide());
+    await this.props.dispatch(getCategories());
   }
 
   render() {
     return (
-      <div 
-        className='container-fluid'
-        style={{
-            width: this.state.windowWidth > this.mediaQuery.phone
-              ? '50%'
-              : '100%', 
-          }}> 
-        <Navbar />
-        <div style={{ marginTop: 30 }}>
-          <div className="alert alert-primary" role="alert">
-            Welcome
+      <div className='' > 
+        <NavbarComp />
+        <div>
+          {this.props.slide.isFulfilled &&
+            <ImageSlider slides={this.props.slide.getSlides.data}/>
+          } 
+          <div>
+          {this.props.category.isFulfilled &&
+           <CategoryComp categories={this.props.category.getCategories.data}/>
+          } 
+          </div>
+          <div>
+            <p>Content here..</p>
           </div>
         </div>
-        <div
-          style={{
-            margin: 50,
-          }}
-        >
-          <CardDeck>
-            <Card
-              style={{
-                alignItems: "center",
-                borderColor: "#fff",
-              }}
-            >
-              <a href="/user">
-                <Card.Img
-                  src={require("../../assets/customer.png")}
-                  style={{
-                    width: 100,
-                    height: 120,
-                    padding: 0,
-                  }}
-                />
-              </a>
-              <a href="/user">
-                <Card.Title>USER</Card.Title>
-              </a>
-            </Card>
-            <Card
-              style={{
-                alignItems: "center",
-                borderColor: "#fff",
-              }}
-            >
-              <a href="/merchant">
-                <Card.Img
-                  src={require("../../assets/store.png")}
-                  style={{
-                    width: 100,
-                    height: 120,
-                    padding: 0,
-                  }}
-                />
-              </a>
-              <a href="/">
-                <Card.Title>MERCHANT</Card.Title>
-              </a>
-            </Card>
-            <Card
-              style={{
-                alignItems: "center",
-                borderColor: "#fff",
-              }}
-            >
-              <a href="/product">
-                <Card.Img
-                  src={require("../../assets/dairy-products.png")}
-                  style={{
-                    width: 100,
-                    height: 120,
-                    padding: 0,
-                  }}
-                />
-              </a>
-              <a href="/product">
-                <Card.Title>PRODUCT</Card.Title>
-              </a>
-            </Card>
-          </CardDeck>
-        </div>
-        <div
-          style={{
-            margin: 50,
-          }}
-        >
-          <CardDeck>
-            <Card
-              style={{
-                alignItems: "center",
-                borderColor: "#fff",
-              }}
-            >
-              <a href="/category">
-                <Card.Img
-                  src={require("../../assets/list.png")}
-                  style={{
-                    width: 100,
-                    height: 120,
-                    padding: 0,
-                  }}
-                />
-              </a>
-              <a href="/category">
-                <Card.Title>CATEGORY</Card.Title>
-              </a>
-            </Card>
-            <Card
-              style={{
-                alignItems: "center",
-                borderColor: "#fff",
-              }}
-            >
-              <a href="/history">
-                <Card.Img
-                  src={require("../../assets/clock.png")}
-                  style={{
-                    width: 100,
-                    height: 120,
-                    padding: 0,
-                  }}
-                />
-              </a>
-              <a href="/history">
-                <Card.Title>HISTORY</Card.Title>
-              </a>
-            </Card>
-          </CardDeck>
-        </div>
+        
       </div>
     );
   }
@@ -163,6 +54,8 @@ class Home extends Component {
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
+    slide: state.slide,
+    category: state.category
   };
 };
 

@@ -1,0 +1,111 @@
+#home-category * {
+    background-color: unset;
+}
+#home-category.categry-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: hidden;
+    margin-top: 2em;
+    margin-bottom: 1em;
+    background-color: rgb(240, 241, 249);
+    height: 360px;
+    width: 100%;
+    padding-inline: 4em;
+}
+
+.categry-wrap .c-left-side {
+    width: 220px;
+    min-width: 200px;
+    height: 255px;
+    display: block;
+    overflow: hidden;
+}
+
+.categry-wrap .c-right-side {
+    display: block;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    overflow: hidden;
+    height: 255px;
+}
+
+.c-right-side div {
+    display: flex; 
+}
+
+div#category-slide-comp{
+    display: flex;
+    width: 206px;
+    min-width: 206px;
+    height: 220px;
+    overflow: hidden;
+    margin-inline: 0.5em;
+    border-radius: 8px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 150px 160px;
+    align-self: center;
+    justify-content: center;
+}
+
+p.p-category-name {
+    background: unset;
+    align-self: center;
+    font-size: 30px;
+    font-weight: 700;
+    color: #FFFF;
+    line-height: 30px;
+}
+
+.c-left-side div h2 {
+
+}
+
+.c-left-side div p {
+    font-size: 12px;
+}
+
+.c-left-side div button.nav-left-btn {
+    width: 32px;
+    height: 32px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 10px rgb(181 181 181 / 25%);
+    border-radius: 52px;
+    border-width: thin;
+    border-color: white;
+    left: 0px;
+    margin-inline-end: 2em;
+    cursor: pointer;
+
+}
+
+.c-left-side div button.nav-right-btn {
+    width: 32px;
+    height: 32px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 10px rgb(181 181 181 / 25%);
+    transform: rotate(-180deg);
+    border-radius: 52px;
+    border-width: thin;
+    border-color: white;
+    position: absolute;
+    margin-inline-start: 2em;
+    cursor: pointer;
+} 
+
+
+.c-left-side .wrap-nav-category {
+    margin-block-start: 4em;
+}
+
+.dot-category-nav {
+    display: flex;
+    flex-direction: row;
+    background-color: unset;
+    justify-content: center;
+    align-items: center;
+    padding-block-start: 1em;
+}

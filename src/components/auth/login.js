@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {logo} from '../../assets/properties';
 import { login } from '../../redux/actions/auth';
-import '../../assets/login.css'
+import '../../styles/login.css'
 import { Button, ButtonGroup, ToggleButton } from "react-bootstrap";
 import { Link, withRouter } from 'react-router-dom'; 
 

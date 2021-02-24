@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { postUser } from '../../redux/actions/auth';
 import { Button, ButtonGroup, ToggleButton } from "react-bootstrap";
 import {logo} from '../../assets/properties';
-import '../../assets/login.css'
+import '../../styles/login.css'
 
 const radios = [
     { name: 'Customer', value: 'customer' },
@@ -35,6 +35,10 @@ class Register extends Component {
   componentDidMount() {
     if (localStorage.getItem('token')) {
         this.props.history.push('/');
+    }
+
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/');
     }
 
     window.addEventListener('resize', () => {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {logo} from '../../assets/properties';
 import { resetPassword } from '../../redux/actions/auth';
-import '../../assets/login.css'
+import '../../styles/login.css'
 import { Button } from "react-bootstrap";
 import { Link, withRouter } from 'react-router-dom';
 
