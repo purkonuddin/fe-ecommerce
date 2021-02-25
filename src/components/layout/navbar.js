@@ -15,13 +15,13 @@ class NavbarComp extends Component {
     // this.props.history.push("/login");
   }
 
-  onLogin() {
-    this.props.history.push("/login");
-  }
+  // onLogin() {
+  //   this.props.history.push("/login");
+  // }
 
-  onSignup() {
-    this.props.history.push("/sign-up");
-  }
+  // onSignup() {
+  //   this.props.history.push("/sign-up");
+  // }
 
   render() {
     return (
@@ -64,14 +64,16 @@ class NavbarComp extends Component {
                 <Link
                   className="btn btn-secondary btn-block btn-block-nav"
                   id=""
-                  onClick={this.onLogin.bind(this)}
+                  // onClick={this.onLogin.bind(this)}
+                  to="/login"
                 >
                     Login
                 </Link>
                 <Link
                   className="btn btn-outline-secondary btn-block-nav"
                   id=""
-                  onClick={this.onSignup.bind(this)}
+                  // onClick={this.onSignup.bind(this)}
+                  to="/sign-up"
                 >
                     Signup
                 </Link> 

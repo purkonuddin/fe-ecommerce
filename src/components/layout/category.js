@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {
     VectorLeft,
     EllipseCategory,
-    EllipseSecunder
+    EllipsePrimare
 } from '../../assets/properties'; 
 import '../../styles/category.css';
 
@@ -108,13 +108,12 @@ const CategoryComp = ({categories}) => { // takes in images as props
                 } 
               
                 
-              <div className="dot-category-nav">{categories.map((data)=>(
-                        <>
-                        {data.id === categories[index].id 
-                        ? <span style={{marginInlineEnd:'1px'}}><EllipseCategory/></span>
-                        : <span style={{marginInlineEnd:'1px'}}><EllipseSecunder/></span>} 
-                        </>
-                    ))}
+              <div className="dot-category-nav">
+                {categories.map((data, i) => 
+                  data.id === categories[index].id 
+                    ? <span style={{marginInlineEnd:'1px'}} key={data.id}><EllipseCategory/></span>
+                    : <span style={{marginInlineEnd:'1px'}} key={data.id}><EllipsePrimare/></span>
+                )}
               </div>
             </div>  
         </div>

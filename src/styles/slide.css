@@ -1,3 +1,36 @@
+#slide-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin-top: 6em;
+    margin-bottom: 1em;
+    margin-inline: 4em;
+}
+
+#slide-box button{
+    width: 52px;
+    height: 52px;
+    background: rgb(255, 255, 255);
+    box-shadow: rgb(181 181 181 / 25%) 0px 4px 10px;
+    border-radius: 52px;
+    border-width: thin;
+    border-color: white;
+    position: absolute;
+    margin-inline: 5em;
+    cursor: pointer;
+}
+
+#slide-box .slide-left-btn {
+    left: 0px;
+}
+
+#slide-box .slide-right-btn {
+    transform: rotate(-180deg);
+    right: 0px;
+}
+
 .wrap-slide-box {
     height: 180px;
     min-width: 455px;
@@ -20,4 +53,22 @@ p.p-slide-name {
     font-weight: 700;
     color: #FFFF;
     line-height: 30px;
+}
+
+.slide-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+.slide-bottom-dot {
+    display: flex;
+    position: absolute;
+    top: 310px;
+    left: 0px;
+    margin-inline-start: 4em;
+    margin-block: -2em;
+    flex-direction: row;
+    background-color: unset;
 }

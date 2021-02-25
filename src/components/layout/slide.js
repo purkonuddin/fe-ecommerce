@@ -65,72 +65,26 @@ const ImageSlider = ({slides}) => { // takes in images as props
   
     return (
         slides.length > 0 && (
-        <div style={{display:'flex', flexDirection:'row', justifyContent:'center', alignItems:'center', overflow:'hidden', marginTop: '6.0em',  marginBottom: '1em', marginInline: '4em'}}>
-          <button 
-            style={{
-              width: '52px',
-              height: '52px',
-              background: '#FFFFFF',
-              boxShadow: '0px 4px 10px rgb(181 181 181 / 25%)',
-              borderRadius: '52px',
-              borderWidth: 'thin',
-              borderColor: 'white',
-              position:'absolute',
-              left:'0px',
-              marginInline:'5em',
-              cursor:'pointer'
-            }}
-            onClick={slideLeft}><VectorLeft/></button>
-          <div style={{display:'flex', flexDirection:'row', justifyContent:'center', overflowInline:'hidden', width:'100%'}}>
+        <div id="slide-box">
+          <button className="slide-left-btn" onClick={slideLeft}><VectorLeft/></button>
+          <div className="slide-content">
              <LeftSlide currentIndex={index-1}/>
              <LeftSlide currentIndex={index}/>
              <SlideWrap swindex={index}/>
              <RightSlide currentIndex={index}/>
              <RightSlide currentIndex={index+1}/>
           </div> 
-          <button 
-           style={{
-            width: '52px',
-            height: '52px',
-            background: '#FFFFFF',
-            boxShadow: '0px 4px 10px rgb(181 181 181 / 25%)',
-            borderRadius: '52px',
-            borderWidth: 'thin',
-            borderColor: 'white',
-            position:'absolute',
-            right:'0px',
-            marginInline:'5em',
-            cursor:'pointer'
-          }}
-          onClick={slideRight}><VectorRight/></button>
-          <div style={{
-            display: 'flex',
-            position: 'absolute',
-            top: '310px',
-            left: '0px',
-            marginInlineStart: '4em',
-            marginBlock: '-2em',
-            flexDirection:'row',
-            backgroundColor:'unset'
-          }}>{slides.map((data)=>(
-                  <>
-                   {data.id === slides[index].id 
-                   ? <span style={{marginInlineEnd:'1px'}}><EllipsePrimare/></span>
-                   : <span style={{marginInlineEnd:'1px'}}><EllipseSecunder/></span>} 
-                  </>
-              ))}
-          </div>
+          <button className="slide-right-btn" onClick={slideRight}><VectorLeft/></button>
+          <div className="slide-bottom-dot">
+                {slides.map((data, i) => 
+                  data.id === slides[index].id 
+                    ? <span style={{marginInlineEnd:'1px'}} key={data.id}><EllipsePrimare/></span>
+                    : <span style={{marginInlineEnd:'1px'}} key={data.id}><EllipseSecunder/></span>
+                )}
+              </div>
         </div>
       )
     );
-  };
-
-//   const mapStateToProps = (state) => {
-//     return {
-//       auth: state.auth,
-//       slide: state.auth
-//     };
-//   };
-//   const Navigate = withRouter(ImageSlider);
+  }; 
   
   export default ImageSlider

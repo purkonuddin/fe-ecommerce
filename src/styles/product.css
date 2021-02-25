@@ -1,0 +1,100 @@
+.top-product {
+    margin-inline: auto;
+    padding-inline: 4em;
+}
+
+.wrap-product {
+    width: 100%; 
+    margin-inline: auto;
+    display: flex;
+    padding-inline: 4em;
+    margin-block: 0.1em 1.9em;
+    flex-wrap: wrap;
+}
+
+#wrap-product-list {
+    width: 208px;
+    height: 278px; 
+    background: #FFFFFF;
+    box-shadow: 0px 0px 14px rgba(173, 173, 173, 0.25);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    margin-block: 0.5em 1.5em;
+    margin-inline: 0.5em;
+}
+
+#wrap-product-list .prod-image-box {
+    width: 208px;
+    height: 136px;
+    background: url('../assets/store.png');
+    background-color: antiquewhite;
+    background-position: center;
+    background-size: 100px;
+    background-repeat: no-repeat;
+    border-radius: 8px 8px 0 0;
+    justify-content: center;
+    display: flex;
+}
+
+.prod-image-box p{
+    background: unset;
+    align-self: flex-end;
+    font-size: 10px;
+    font-weight: 700;
+    color: #323236;
+    line-height: 0px;
+}
+
+#wrap-product-list .prod-description-box {
+    padding-inline: 1em;
+    padding-block-start: 1em;
+    text-transform: capitalize;
+}
+
+.prod-description-box .product-name {
+    font-family: Metropolis;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    color: #000000;
+}
+
+.prod-description-box .product-price{
+    font-family: Metropolis;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 16px;
+    /* identical to box height */
+    
+    
+    color: #DB3022;
+}
+
+.prod-description-box .seller {
+    font-family: Metropolis;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 5px;
+    /* identical to box height */
+    
+    
+    color: #9B9B9B;
+}
+
+.prod-description-box .star {
+    font-family: Metropolis;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 10px;
+    line-height: 5px;
+    /* identical to box height, or 80% */
+    
+    
+    /* Gray */
+    
+    color: #9B9B9B;
+}
