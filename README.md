@@ -72,3 +72,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 ## Demo
 recorder-capture:  
 [https://user-images.githubusercontent.com/44079569/109228114-f4a2cb80-77f3-11eb-9f67-836a6eeef9ea.mp4](https://user-images.githubusercontent.com/44079569/109228114-f4a2cb80-77f3-11eb-9f67-836a6eeef9ea.mp4)
+Filters:
+[https://user-images.githubusercontent.com/44079569/109401437-475dbe00-7981-11eb-8012-337891fe194d.mp4](https://user-images.githubusercontent.com/44079569/109401437-475dbe00-7981-11eb-8012-337891fe194d.mp4)
