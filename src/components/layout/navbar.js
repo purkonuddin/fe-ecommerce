@@ -14,7 +14,7 @@ const CheckBox = props => {
   return (
     <div className={props.styles}>
       <input id={props.inputId} key={props.id} onChange={props.handleCheckChieldElement} type="checkbox" checked={props.isChecked} value={props.value} /> 
-      <button style={props.isChecked ? {backgroundColor:'#DB3022', color:'#FFFFFF'} : {backgroundColor:'#FFFFFF',  color:'#OOOOOO'}}>{props.value}</button>
+      <button style={props.isChecked ? {backgroundColor:'#DB3022', color:'#FFFFFF'} : {backgroundColor:'#FFFFFF',  color:'#000000'}}>{props.value}</button>
     </div> 
   )
 }
