@@ -11,6 +11,8 @@ import { ReactComponent as EllipsePrimare } from './ellipse-primer.svg';
 import { ReactComponent as EllipseSecunder } from './ellipse-secunder.svg';
 import { ReactComponent as EllipseCategory } from './allipse-category.svg';
 import { ReactComponent as Star } from './star.svg';
+import { ReactComponent as Close } from './close.svg';
+import  ellipseBg from './Ellipse-bg.png';
 export {
     logo,
     SearchSvg, 
@@ -24,5 +26,7 @@ export {
     EllipsePrimare,
     EllipseSecunder,
     EllipseCategory,
-    Star
+    Star,
+    Close,
+    ellipseBg
 };

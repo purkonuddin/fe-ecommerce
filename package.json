@@ -64,5 +64,10 @@
       "pre-commit": "lint-staged"
     }
   },
-  "proxy": "http://3.92.225.2:8001"
+  "proxy": "http://3.92.225.2:8001",
+  "main": "index.js",
+  "license": "MIT",
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "devDependencies": {},
+  "author": "purkonuddin"
 }

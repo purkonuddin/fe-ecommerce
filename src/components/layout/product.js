@@ -33,6 +33,17 @@ class Product extends Component {
       product.getProducts.data.sort((a, b) => (a.id < b.id) ? 1 : -1)
     } 
 
+    if (product.isFulfilled){
+      product.getProducts.data.filter(data => 
+        (data.product_color.includes('Red') || data.product_color.includes('Biru')) && 
+        data.product_size.includes('S') && 
+        data.product_category === 't-shirt'
+        ).map((data, i) =>
+        console.log('@Red-filter', data.id, data.product_color, data.product_size)
+      )
+
+    }
+
     return (
       <>
       <div className="top-product">

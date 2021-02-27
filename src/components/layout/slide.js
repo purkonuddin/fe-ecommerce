@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import {
     VectorLeft,
-    VectorRight,
     EllipsePrimare,
     EllipseSecunder
 } from '../../assets/properties'; 
