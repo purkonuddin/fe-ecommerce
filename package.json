@@ -69,5 +69,16 @@
   "license": "MIT",
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "devDependencies": {},
-  "author": "purkonuddin"
+  "author": "purkonuddin",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/purkonuddin/fe-ecommerce.git"
+  },
+  "keywords": [
+    "ecommerce"
+  ],
+  "bugs": {
+    "url": "https://github.com/purkonuddin/fe-ecommerce/issues"
+  },
+  "homepage": "https://github.com/purkonuddin/fe-ecommerce#readme"
 }
