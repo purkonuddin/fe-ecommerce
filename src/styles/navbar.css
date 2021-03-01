@@ -139,3 +139,12 @@
     background-position: center;
     background-image: url('../assets/Ellipse-bg.png');
   }
+
+  .modal-container #modal-toggle:checked ~ .modal-backdrop .modal-content .filter-apply {
+    background: #f8f9fa;
+    height: 36px;
+    width: 160px;
+    border-radius: 25px;
+    border-width: 1px;
+    border-color: #9b9b9b;
+}

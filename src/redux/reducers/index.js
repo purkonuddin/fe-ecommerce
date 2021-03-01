@@ -6,6 +6,7 @@ import category from "./category";
 import auth from "./auth";
 import slide from "./slide";
 // import merchant from "./merchant";
+import filter from "./filter";
 export default combineReducers({
   product,
   category,
@@ -14,4 +15,5 @@ export default combineReducers({
   auth,
   slide,
 //   merchant,
+  filter,
 });

@@ -7,7 +7,7 @@ import Product from "../layout/product"
 import '../../styles/home.css'
 import { getSlide } from "../../redux/actions/slide";
 import { getCategories } from "../../redux/actions/category"; 
-import { getProducts } from '../../redux/actions/product';
+import { getProducts } from '../../redux/actions/product'; 
 
 class Home extends Component {
   constructor(props) {
@@ -20,9 +20,20 @@ class Home extends Component {
       };
 
     this.state = { 
+      searchTerm: '',
+		  currentlyDisplayed: {},
       windowWidth: document.body.clientWidth,
     };
-  }
+  } 
+
+  onInputChange = (event) => {
+    const newlyDisplayed = this.props.product.getProducts.data.filter(data => data.product_name.includes(event.target.value.toLowerCase()));
+    this.setState({
+      searchTerm: event.target.value,
+      currentlyDisplayed: newlyDisplayed
+    }); 
+
+    }
 
   getProducts = async () => {
     const data = {sort: 'DESC'};
@@ -35,10 +46,14 @@ class Home extends Component {
     await this.getProducts();
   }
 
-  render() {
+  render() { 
+    // console.log('@currentlyDisplayed: ',this.state.currentlyDisplayed);
+    // console.log('@searchTerm: ',this.state.searchTerm);
+    const {currentlyDisplayed, searchTerm} = this.state;
+
     return (
       <div> 
-        <NavbarComp />
+        <NavbarComp searchTerm={this.onInputChange.bind(this)}/>
         <div>
           {this.props.slide.isFulfilled &&
             <ImageSlider slides={this.props.slide.getSlides.data}/>
@@ -46,6 +61,9 @@ class Home extends Component {
           {this.props.category.isFulfilled &&
            <CategoryComp categories={this.props.category.getCategories.data}/>
           } 
+          {this.state.searchTerm !== '' &&
+            <Product title="Search" subtitle="hasil pencarian berdasarkan nama product" data={currentlyDisplayed} sortBy="product_name" limit={10} searchTerm={searchTerm}/> 
+          }
           <Product title="New" subtitle="You’ve never seen it before!" product={this.props.product} sortBy="id" limit={5}/> 
           <Product title="Popular" subtitle="Find clothes that are trending recently" product={this.props.product} sortBy="product_rating" limit={10}/> 
         </div>

@@ -22,9 +22,12 @@ const NumberFormat = ({value, prefix} ) => {
 }
 
 class Product extends Component { 
+  componentDidMount() {
+    
+  }
 
   render() {
-    const { product, title, subtitle, sortBy, limit = 10} = this.props;
+    const { searchTerm, product, sortBy, filter} = this.props;
     if (product.isFulfilled && sortBy === 'product_rating') {
       product.getProducts.data.sort((a, b) => (a.product_rating < b.product_rating) ? 1 : -1)
     }
@@ -33,26 +36,82 @@ class Product extends Component {
       product.getProducts.data.sort((a, b) => (a.id < b.id) ? 1 : -1)
     } 
 
-    if (product.isFulfilled){
-      product.getProducts.data.filter(data => 
-        (data.product_color.includes('Red') || data.product_color.includes('Biru')) && 
-        data.product_size.includes('S') && 
-        data.product_category === 't-shirt'
-        ).map((data, i) =>
-        console.log('@Red-filter', data.id, data.product_color, data.product_size)
-      )
+    if (product.isFulfilled && searchTerm !== undefined){ 
+      let warna = []
+      let kategori = []
+      let ukuran = []
+      let merek = []
 
+      if (filter.filterIsApply){  
+        filter.colors.map((color) => 
+          color.isChecked &&
+            warna.push(color.value)
+        );
+
+        filter.categories.map((category) => 
+          category.isChecked &&
+            kategori.push(category.value)
+        );
+
+        filter.sizes.map((size) => 
+          size.isChecked &&
+            ukuran.push(size.value)
+        );
+
+        filter.brands.map((brand) => 
+            merek.push(brand)
+        );
+      }
+
+
+      console.log('hasil filters: ', warna, kategori, ukuran, merek); 
     }
 
+    if(product.isFulfilled && searchTerm !== undefined){
+      const filterField = (search, value) => value.toLowerCase().indexOf(search.toLowerCase()) >= 0;
+      const orFilter = (search, values) => values.some(filterField.bind(null, search));
+      const newlyDisplayed = product.getProducts.data.filter(data =>
+        orFilter(searchTerm.toLowerCase(), [data.product_name, data.product_description, data.seller])
+      ); 
+
+      // const newlyDisplayed = product.getProducts.data.filter(data => 
+      //   data.product_name.includes(searchTerm.toLowerCase()) &&
+      //   (data.product_color.includes('Red') || data.product_color.includes('Biru')) && 
+      //   data.product_size.includes('S')
+      // );
+      return (
+        <WrapProduct fields={newlyDisplayed} {...this.props}/>
+      )
+    } 
+
     return (
-      <>
+      <WrapProduct fields={product.getProducts.data} {...this.props}/> 
+    );
+  }
+}
+
+const mapStateToProps = (state) => {
+  return {
+    product: state.product,
+    filter: state.filter,
+  };
+};
+
+export default connect(mapStateToProps)(Product);
+
+
+const WrapProduct = (props) => {
+  const { fields, product, title, subtitle, limit = 10} = props;
+
+  return (
+    <>
       <div className="top-product">
         <h2>{title}</h2>
         <p>{subtitle}</p>
       </div>
       <div className="wrap-product"> 
         {product.isFulfilled && 
-         product.getProducts.data.map((data, i) => 
+         fields.map((data, i) => 
           i < limit && (
             <div key={data.id} id="wrap-product-list">
             <div className="prod-image-box">
@@ -73,15 +132,5 @@ class Product extends Component {
         }
       </div>
       </>
-       
-    );
-  }
+  )
 }
-
-const mapStateToProps = (state) => {
-  return {
-    product: state.product,
-  };
-};
-
-export default connect(mapStateToProps)(Product);

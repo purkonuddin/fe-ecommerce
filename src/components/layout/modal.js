@@ -7,21 +7,18 @@ const ModalPop = (props) => {
     const {
         ButtonComp,
         ModalContent,
-        ModalBottom,
-        ...remainingProps
+        ModalBottom, 
       } = props;
 
     return ( 
-        <div class="modal-container">
+        <div className="modal-container">
             <input id="modal-toggle" type="checkbox"/>
             {ButtonComp}
-            <div class="modal-backdrop">
-                <div class="modal-content">
+            <div className="modal-backdrop">
+                <div className="modal-content">
 
                     <div className="modal-top">
-                    <label className="modal-close-x" htmlfor="modal-toggle">
-                        <Close/>
-                    </label>
+                    <label className="modal-close button" htmlFor="modal-toggle"><Close/></label> 
                     <p>Filter</p>
                     </div>
 

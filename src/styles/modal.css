@@ -85,7 +85,7 @@
     .modal-container #modal-toggle:checked ~ .modal-backdrop .modal-content { left: 0; }
 }
     
-.modal-container #modal-toggle:checked ~ .modal-backdrop .modal-content .modal-close {
+.modal-container #modal-toggle:checked ~ .modal-backdrop .modal-content .filter-apply {
     background: #f8f9fa;
     height: 36px;
     width: 160px;
@@ -94,14 +94,25 @@
     border-color: #9b9b9b;
 }
 
-.modal-container #modal-toggle:checked ~ .modal-backdrop .modal-content .modal-close-x {
+.modal-backdrop .modal-content .modal-bottom button.filter-apply {
+    background: #f8f9fa;
+    height: 36px;
+    width: 160px;
+    border-radius: 25px;
+    border-width: 1px;
+    border-color: #9b9b9b;
+}
+
+.modal-container #modal-toggle:checked ~ .modal-backdrop .modal-content .modal-close {
     height: fit-content;
     width: fit-content; 
+    cursor: pointer;
 }
     
 .modal-container #modal-toggle:checked ~ .modal-backdrop .modal-content .modal-close.button:hover {
     color: #fff;
     background: #1E824C;
+    cursor: pointer;
 }
     
 .modal-container #modal-toggle:checked ~ .modal-backdrop .modal-content .modal-close:hover { color: #333; }
