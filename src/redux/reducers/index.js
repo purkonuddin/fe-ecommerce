@@ -1,19 +1,21 @@
 import { combineReducers } from "redux";
 import product from "./product";
 import category from "./category";
-// import user from "./user";
-// import histories from "./history";
+import checkout from "./checkout";
+import user from "./user";
 import auth from "./auth";
 import slide from "./slide";
-// import merchant from "./merchant";
+import ongkir from "./ongkir";
 import filter from "./filter";
+import payment from "./payment";
 export default combineReducers({
   product,
   category,
-//   histories,
-//   user,
+  checkout,
+  user,
   auth,
   slide,
-//   merchant,
+  ongkir,
   filter,
+  payment,
 });

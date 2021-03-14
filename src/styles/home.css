@@ -6,7 +6,18 @@
 @media (min-width: 550px){
     .form-inline .form-control {
         display: inline-block;
-        width: 307px;
+        width: 700px;
+        vertical-align: middle;
+        height: 40px;
+        border-radius: 23px;
+    }
+
+}
+
+@media (max-width: 640px){
+    .form-inline .form-control {
+        display: inline-block;
+        width: 500px;
         vertical-align: middle;
         height: 40px;
         border-radius: 23px;

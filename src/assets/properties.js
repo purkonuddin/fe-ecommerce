@@ -11,8 +11,21 @@ import { ReactComponent as EllipsePrimare } from './ellipse-primer.svg';
 import { ReactComponent as EllipseSecunder } from './ellipse-secunder.svg';
 import { ReactComponent as EllipseCategory } from './allipse-category.svg';
 import { ReactComponent as Star } from './star.svg';
+import { ReactComponent as Star22 } from './star-22.svg';
 import { ReactComponent as Close } from './close.svg';
+import { ReactComponent as SearchField } from './SearchField.svg';
+import { ReactComponent as NoNotifiYet } from './no-notifi-yet.svg';
+import { ReactComponent as Vector } from './Vector.svg';
+import Clipboard1 from './orderpin.png';
+import Mapin1 from './mappin.png';
+import User1 from './accountpin.png';
 import  ellipseBg from './Ellipse-bg.png';
+import  customer from './customer.png';
+import  Empty from './empty.png';
+import  notification from './Group-1306.png';
+import  GoPay from './Logo-GoPay.png';
+import  POS from './Logo-POS.png';
+import  Mastercard from './Logo-Mastercard.png';
 export {
     logo,
     SearchSvg, 
@@ -28,5 +41,18 @@ export {
     EllipseCategory,
     Star,
     Close,
-    ellipseBg
+    ellipseBg,
+    Star22,
+    SearchField,
+    customer,
+    Empty,
+    NoNotifiYet,
+    notification,
+    Vector,
+    Clipboard1,
+    Mapin1,
+    User1,
+    Mastercard,
+    POS,
+    GoPay,
 };

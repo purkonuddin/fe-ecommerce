@@ -23,7 +23,7 @@
     transition: background 0.3s ease-in;
   }
 
-  .color-container #color-toggle {
+  .color-container input {
     position: absolute;
     left: 0;
     top: 0;
@@ -34,8 +34,8 @@
     cursor: pointer;
   }
 
-  .color-container #color-toggle:hover ~ button { color: grey; background-color: #e6ece9; border-color: 1px black;}
-  .size-container #size-toggle:hover ~ button { color: grey; background-color: #e6ece9; border-color: 1px black;}
+  .color-container input:hover ~ button { color: grey; background-color: #e6ece9; border-color: 1px black;}
+  .size-container input:hover ~ button { color: grey; background-color: #e6ece9; border-color: 1px black;}
 
 .filter-content .size-container {
     margin-block: 0.1em;
@@ -47,7 +47,7 @@
     flex: auto;
   }
 
-  .size-container #size-toggle {
+  .size-container input {
     position: absolute;
     left: 0;
     top: 0;
@@ -105,7 +105,7 @@
     flex: auto;
   }
 
-  .category-container #category-toggle {
+  .category-container input {
     position: absolute;
     left: 0;
     top: 0;
@@ -130,7 +130,7 @@
     border-radius: 8px;
   }
 
-  .category-container input#category-toggle:checked ~ .category-container button {
+  .category-container input:checked ~ .category-container button {
     color: red;
   }
 
@@ -147,4 +147,89 @@
     border-radius: 25px;
     border-width: 1px;
     border-color: #9b9b9b;
+}
+
+.nav-link img#auth-img{
+  border-radius: 32px;
+}
+
+input.form-control {
+  width: 700px;
+}
+
+/* @media (max-width: 500px){
+  input.form-control {
+    width: 300px;
+  }
+} */
+
+.notification-box {
+  width: 258px;
+  height: 305px;
+  background: transparent;
+  border-radius: 4px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('../assets/Union.png');
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px grey;
+  box-shadow: 0px 7px 4px 0px rgb(173 173 173 / 25%); 
+}
+
+.toggle-notify-hidden {
+  visibility: hidden;
+}
+
+.profile-box {
+  width: 258px;
+  height: 105px;
+  background: #fff;
+  border-radius: 4px; 
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px grey;
+  box-shadow: 0px 7px 4px 0px rgb(173 173 173 / 25%); 
+}
+
+.toggle-notify-visible {
+  visibility: visible;
+}
+
+.badge-light {
+  color: #e9ecef;
+  background-color: #db3022;
+  left: -11px;
+  position: relative;
+  top: -5px;
+}
+
+@media screen and (max-width: 550px){
+  .navbar-nav {
+    display: flex;
+    flex-direction: row-reverse;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+    margin-top: 5px;
+  }
+}
+
+@media screen and (max-width: 640px){
+  .navbar-nav {
+    display: flex;
+    flex-direction: row-reverse;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+    margin-top: 5px;
+  }
 }

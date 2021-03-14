@@ -22,7 +22,7 @@ const NumberFormat = ({value, prefix} ) => {
   return ( <p className="product-price">{data}</p>)
 }
 
-class Product extends Component { 
+class ProductSeller extends Component { 
   componentDidMount() {
     
   }
@@ -65,7 +65,7 @@ class Product extends Component {
       }
 
 
-      // console.log('hasil filters: ', warna, kategori, ukuran, merek); 
+      console.log('hasil filters: ', warna, kategori, ukuran, merek); 
     }
 
     if(product.isFulfilled && searchTerm !== undefined){
@@ -98,25 +98,23 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Product);
+export default connect(mapStateToProps)(ProductSeller);
 
 
 const WrapProduct = (props) => {
-  const { fields, product, title, subtitle, limit = 10} = props;
+  const { fields, product, title, subtitle, refdata, navTo} = props;
 
   return (
     <>
       <div className="top-product">
         <h2>{title}</h2>
-        {subtitle &&
         <p>{subtitle}</p>
-        }
       </div>
       <div className="wrap-product"> 
         {product.isFulfilled && 
          fields.map((data, i) => 
-          i < limit && (
-            <Link to={`/product/${data.product_category}/${data.product_id}`} key={data.id.toString()} >
+          (data.seller === refdata.seller && refdata.id !== data.id) && (
+            <Link to={`/product/${data.product_category}/${data.product_id}`} onClick={()=>navTo(data.product_id)} key={data.id.toString()} >
               <div id="wrap-product-list">
                 <div className="prod-image-box">
                   {data.product_image !== '' 

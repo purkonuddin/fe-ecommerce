@@ -64,10 +64,18 @@ class Home extends Component {
           {this.state.searchTerm !== '' &&
             <Product title="Search" subtitle="hasil pencarian berdasarkan nama product" data={currentlyDisplayed} sortBy="product_name" limit={10} searchTerm={searchTerm}/> 
           }
-          <Product title="New" subtitle="You’ve never seen it before!" product={this.props.product} sortBy="id" limit={5}/> 
-          <Product title="Popular" subtitle="Find clothes that are trending recently" product={this.props.product} sortBy="product_rating" limit={10}/> 
+          { this.props.product.isRejected ? (
+            <div><p>{`Status: ${this.props.product.rejected.status}, Message: ${this.props.product.rejected.message}`}</p></div>
+          ) : this.props.product.isPending ? (
+            <div><p>Loading...</p></div>
+          ) : (
+            <>
+              <Product title="New" subtitle="You’ve never seen it before!" product={this.props.product} sortBy="id" limit={5}/> 
+              <Product title="Popular" subtitle="Find clothes that are trending recently" product={this.props.product} sortBy="product_rating" limit={10}/> 
+            </>
+          )
+        }
         </div>
-        
       </div>
     );
   }

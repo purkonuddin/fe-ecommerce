@@ -1,0 +1,293 @@
+.app nav{
+    background-color: #FFFFFF;
+}
+.app{
+    max-width: 1200px; 
+    width: 100%; 
+    margin: 100px auto; 
+    height: fit-content;
+}
+.details{
+    display: flex; 
+    justify-content: flex-start; 
+    flex-wrap: wrap; 
+    padding: 30px 0;
+}
+.details .big-img{
+    max-width: 500px; 
+    min-width: 290px; 
+    overflow: hidden; 
+    margin: 25px;
+}
+.big-img img{
+    width: 100%; 
+    height: 100%; 
+    max-height: 400px; 
+    display: block; 
+    object-fit: cover;
+}
+.details .box{
+    max-width: 500px; 
+    min-width: 290px; 
+    margin: 25px;
+}
+.details .box-detail{
+    margin: 25px;
+}
+.box .row{
+    display: flex; 
+    justify-content: space-between; 
+    margin-bottom: 15px;
+}
+.box .row h2{
+    text-transform: uppercase; 
+    letter-spacing: 2px;
+}
+.box .row span{
+    color: crimson;
+}
+.box .colors div.color-container{
+    margin-block: 0.1em;
+    position: relative;
+    height: 2.9em;
+    width: 2.9em;
+    margin-inline: 0.1em;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+.box .colors div.ellipse {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('../assets/Ellipse-bg.png');
+}
+.box .colors div.color-container input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+.box .colors div button{ 
+    display: flex;
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    line-height: 36px; 
+    font-size: 14px;
+    border: 0;
+    border-radius: 25px;
+    box-shadow: 0 5px 5px -5px #333;
+    transition: background 0.3s ease-in;
+}
+.thumb{ 
+    width: 100%; 
+    height: 100px; 
+    display: flex;
+    cursor: pointer;
+    margin: 10px 0;
+    justify-content: center;
+}
+.thumb img{
+    width: 90px; 
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border: 1px solid #ddd; 
+    margin-right: 5px; 
+    opacity: 0.7; 
+    border-radius:5px;
+}
+.thumb img.active{
+    opacity: 1; 
+    border: 1px solid crimson;}
+.box .cart{
+    background:#333; 
+    color:white; 
+    outline: none; 
+    border: none; 
+    cursor: pointer; 
+    padding: 10px 25px; 
+    margin-top:15px;
+}
+p.subtitle{
+    text-transform: capitalize;
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+p.condition{
+    color: crimson;
+    margin-bottom: 15px;
+}
+.redup{
+    opacity: 0.4;
+}
+p.product-price{
+    font-size: 30px;
+    font-weight: 700;
+}
+.colors{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.detail-btn-box {
+    display: flex;
+    justify-content: flex-start;
+    margin-block: 1em;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.detail-btn-box button{
+    width: 160px; 
+    height: 48px;
+    border-radius: 24px;
+    border: 1.5px solid #222222;
+    box-sizing: border-box;
+    color: #222222;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+.detail-btn-box button:hover{
+    border: 1.5px solid #222222;
+    color: #5b0e0e;
+    font-weight: 700;
+    text-transform: capitalize;
+    opacity: 0.7;
+}
+
+.detail-btn-box button.buy-now{
+    border-radius: 25px;
+    border: 1.5px solid #DB3022; 
+    background: #DB3022;
+    width: 343px; 
+    color: #ffffff;
+
+}
+/* Ellipse 9 */
+
+.ellipse-9 {
+    width: 36px;
+    height: 36px;
+    background: #D4D4D4;
+    border-radius: 36px;
+    border: 0px;
+    color: #fff;
+    font-weight: 900;
+    margin-inline-end: 1em;
+    margin-block-end: 1em;
+}
+/* Ellipse 10 */
+
+.ellipse-10{
+    width: 36px;
+    height: 36px;
+    background: #FFFFFF;
+    border: 1px;
+    box-shadow: 0px 0px 4px rgba(142, 142, 142, 0.25);
+    border-radius: 36px;
+    color: rgb(0, 0, 0);
+    font-weight: 900;
+    margin-inline: 1em;
+    margin-block-end: 1em;
+}
+#breadcrumb{
+    display: flex;
+    width: 100%;
+    padding-inline: 25px;
+    flex-direction: row-reverse;
+    color: darkgoldenrod;
+    font: message-box;
+}
+#breadcrumb nav ol{
+    background-color: unset;
+}
+
+.product-review{
+    margin:25px;
+    width: 100%;
+}
+
+.product-review div{
+    display: inline-flex;
+}
+
+.product-review div .left-start{
+    display: flex;
+    flex-direction: column;
+    width: 170px;
+}
+
+.product-review div p {
+    margin-top: 0;
+    margin-bottom: 1px;
+}
+
+.product-review div p#num-start{
+    font-size: 60px;
+    font-weight: 500;
+}
+
+.product-review div p#num-start span{
+    font-size: 20px;
+    font-weight: 400;
+    color: #9B9B9B;
+}
+
+.product-review div .grafik{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+}
+
+.product-review div .grafik p{
+    margin-top: 0;
+    margin-bottom: 1px;
+}
+
+.product-review div .grafik p span#grafik-line{
+    background-color: #DB3022; 
+    margin-inline: 1em;
+    border-radius: 10px;
+}
+
+.app .details .top-product {
+    margin-inline: 25px;
+    padding-inline: 0;
+}
+
+.app .details .wrap-product {
+    width: 100%;
+    margin-inline: auto;
+    display: flex;
+    padding-inline: 25px;
+    margin-block: 0.1em 1.9em;
+    flex-wrap: wrap;
+}
+.details div .prod-image-box{
+    width: 85%;
+    height: 100%;
+    max-height: 400px;
+    background: url('../assets/store.png');
+    background-color: antiquewhite;
+    background-position: center;
+    background-size: 100px;
+    background-repeat: no-repeat;
+    border-radius: 8px 8px 0 0;
+    justify-content: center;
+    display: flex;
+}
+@media (max-width:500px){
+    .thumb{
+        height: 50px;
+    }
+    .thumb img{
+        width: 50px;
+    }
+}

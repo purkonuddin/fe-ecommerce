@@ -2,20 +2,19 @@ import React, { Suspense }  from "react";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
-// import Product from "./components/product/product";
+import Product from "./components/product";
 import Login from "./components/auth/login";
 import Register from "./components/auth/register";
 import SendResetPassword from "./components/auth/send_reset_password";
 import ResetPassword from "./components/auth/reset_password";
 import { store, persistor } from "./redux/store";
-// import Home from "./components/home";
-// import Category from "./components/category/category";
-// import User from "./components/user/user";
-// import Merchant from "./components/merchant/merchant";
-// import History from "./components/history/history";
+import Checkout from "./components/checkout";
+import Category from "./components/categori";
+import Profile from "./components/profile"; 
 import error from "./assets/404.png";
 import { Button } from "react-bootstrap";
 import logo from './logo.svg'
+import './App.css'
 
 const Home = React.lazy(() => import('./components/home'));
 
@@ -59,10 +58,10 @@ function App() {
               <Route path="/send_reset_password" component={SendResetPassword} />
               <Route path="/reset_password/:token" component={ResetPassword} />
               <Route exact path="/" component={Home} />
-              {/* <Route path="/product" component={Product} /> */}
-              {/* <Route path="/category" component={Category} /> */}
-              {/* <Route path="/user" component={User} /> */}
-              {/* <Route path="/merchant" component={Merchant} /> */}
+              <Route path="/product/:category/:product_id" component={Product} />
+              <Route path="/category/:categori_id" component={Category} />
+              <Route path="/checkout" component={Checkout} />
+              <Route path="/profile" component={Profile} />
               {/* <Route path="/history" component={History} /> */} 
               <Route exact path="/search" component={SearchPage} />
               <Route component={notFound} />
