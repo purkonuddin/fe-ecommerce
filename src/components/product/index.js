@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import '../../styles/product-detail.css'
-// import { Breadcrumb,  } from "react-bootstrap";
 import { withRouter } from 'react-router-dom';
-// import {Star, Star22} from '../../assets/properties'
 import { getProducts, getProductById } from '../../redux/actions/product'; 
 import { postToCart, getCart } from '../../redux/actions/checkout'; 
 import NavbarComp from "../layout/navbar"; 
@@ -77,7 +75,6 @@ class ProductComp extends Component {
 
     let length = product_size.length;
     let sizeIdx = this.state.sizeIdx; 
-    // console.log(sizeIdx, length-1);
 
     // let  index = 0;
     if (action === 'min') {
@@ -89,7 +86,6 @@ class ProductComp extends Component {
       this.setState({sizeIdx:sizeIdx})
     } 
 
-    // this.handleSizeRef();
   } 
 
   handleSizeRef = () => {
@@ -106,9 +102,7 @@ class ProductComp extends Component {
     let warna = this.colorsRef.current.children
     for(let i=0; i<warna.length; i++) {
       if(warna[i].className === "color-container ellipse" ){
-        // console.log(this.colorsRef.current.children[i].children[0].attributes[2].value);
         let selected = this.state.selected
-
         selected.forEach(data => {
           if (data.field === 'color')
           data.value =  this.colorsRef.current.children[i].children[0].attributes[2].value
@@ -133,7 +127,6 @@ class ProductComp extends Component {
 
   handleTab= index => {
     this.setState({index:index})
-    // console.log(this.myRef.current)
     const images = this.myRef.current.children
     for(let i=0; i<images.length;i++){images[i].className = images[i].className.replace("active", "")}
     images[index].className = "active";
@@ -185,7 +178,6 @@ class ProductComp extends Component {
 
     if(this.props.match.params.product_id){
       await this.getProductById(this.props.match.params.product_id)
-      // await this.props.dispatch(getProductById(this.props.match.params.product_id))
       this.setId();
     }
 
@@ -197,11 +189,6 @@ class ProductComp extends Component {
 
     let config = `Bearer ${this.state.token}`;
     await this.props.dispatch(getCart(config));
-
-
-    // const {colorIdx} = this.state;
-    // await this.myRef.current.children[index].className="active";
-    // this.colorsRef.current.children[colorIdx].className="color-container ellipse";
   }  
 
   handleAddBag = async ()=> {
@@ -231,7 +218,6 @@ class ProductComp extends Component {
       }
 
       let config = `Bearer ${this.state.token}`;
-      // console.log('TOKEN', config);
       await this.props.dispatch(postToCart(data, config));
       await this.props.dispatch(getCart(config));
       this.setState({ditambahkan: true})
@@ -257,7 +243,7 @@ class ProductComp extends Component {
                     <>
                     {checkout.getCart.isFulfilled &&
                       ditambahkan &&
-                        <p>thank you... Add to Bag is fulfilled!</p>
+                        <p>thank you... item successfully posted to cart!</p>
                     }
                     </> 
                   }
@@ -276,7 +262,13 @@ class ProductComp extends Component {
                   handleAddBag = {this.handleAddBag}
                   {...this.props}
                 /> 
-                <ProductSeller title="You can also like this" subtitle="You’ve never seen it before!" product={this.props.product} refdata={product.getProductById.data.result[0]} sortBy="id" navTo={this.getProductById}/>
+                <ProductSeller 
+                  title="You can also like this" 
+                  subtitle="You’ve never seen it before!" 
+                  product={this.props.product} 
+                  refdata={product.getProductById.data.result[0]} 
+                  sortBy="id" 
+                  navTo={this.getProductById}/>
                 </>
               ) : null
             } 
