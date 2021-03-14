@@ -13,7 +13,10 @@ import {getPropince, getDestination, postCost} from '../../redux/actions/ongkir'
 import Modal from 'react-modal';
 // import {v4 as uuidv4} from 'uuid';
 // import midtransClient from 'midtrans-client';
-
+const modalCheckout = {
+    width: '810px',
+    height: '675px'
+}
 // modal
 const customStyles = {
     content : {
@@ -340,7 +343,7 @@ class Checkout  extends Component {
                                 isOpen={this.state.modalIsOpen}
                                 onAfterOpen={this.afterOpenModal}
                                 onRequestClose={this.closeModal}
-                                style={customStyles}
+                                style={ customStyles }
                                 contentLabel="Fulfilled"
                                 >
                                 <div className="modal-top">
@@ -448,23 +451,19 @@ const mapStateToProps = (state) => {
                 style={customStyles}
                 contentLabel="Choose another address"
                 >
-                <div className="modal-top">
+                <div className="modal-top address-top">
                     <h2 ref={_subtitle => (subtitle = _subtitle)}>Choose another address</h2>
                     <button onClick={closeModal}><Close/></button>
                 </div>
-                <div onClick={openModalAddAddress}>
+                <div className="add-address-btn" onClick={openModalAddAddress}>
                     <button type="button">Add new address</button>
                 </div> 
-                <div>
-                    {
-                        [1,2,3].map((data, i)=>
-                        <div key={i.toString()}>
-                            <h3>Andreas Jane</h3>
-                            <p>Perumahan Sapphire Mediterania, Wiradadi, Kec. Sokaraja, Kabupaten Banyumas, Jawa Tengah, 53181 [Tokopedia Note: blok c 16] Sokaraja, Kab. Banyumas, 53181</p>
-                            <button type="button">Change address</button>
-                        </div>
-                        )
-                    }
+                <div className="address-content"> 
+                    <div>
+                        <h3>Andreas Jane</h3>
+                        <p>Perumahan Sapphire Mediterania, Wiradadi, Kec. Sokaraja, Kabupaten Banyumas, Jawa Tengah, 53181 [Tokopedia Note: blok c 16] Sokaraja, Kab. Banyumas, 53181</p>
+                        <button type="button">Change address</button>
+                    </div> 
                 </div>
             </Modal>
             <Modal
@@ -474,16 +473,16 @@ const mapStateToProps = (state) => {
                 style={customStyles}
                 contentLabel="Add new address"
                 >
-                <div className="modal-top">
+                <div className="modal-top address-top add-address-top">
                     <h2>Add new address</h2>
                     <button onClick={closeModalAddAddress}><Close/></button>
                 </div>
-                <div className="payment-modal-content"> 
-                    <div>
+                <div className="payment-modal-content add-address-content"> 
+                    <div id="save-as">
                         <label>Save address as (ex : home address, office address)</label>
                         <input type="text"/>
                     </div> 
-                    <div>
+                    <div id="receipent">
                         <div>
                             <label>Recipient’s name</label>
                             <input type="text"/>
@@ -493,7 +492,7 @@ const mapStateToProps = (state) => {
                             <input type="text"/>
                         </div>
                     </div>
-                    <div>
+                    <div id="address-pos-code">
                         <div>
                             <label>Address</label>
                             <input type="text"/>
@@ -503,17 +502,17 @@ const mapStateToProps = (state) => {
                             <input type="text"/>
                         </div>
                     </div>
-                    <div>
+                    <div id="city">
                         <label>City or Subdistrict</label>
                         <input type="text"/>
                     </div> 
-                    <div>
-                        <input type="radio" value="true" name="primary_address"/> Make it the primary address
+                    <div id="true-false">
+                        <input type="radio" value="true" name="primary_address"/> <span>Make it the primary address</span>
                     </div> 
                 </div>
-                <div className="payment-modal-bottom">
-                    <button type="button" className="btn ">Cancel</button>
-                    <button type="button" className="btn btn-secondary">Save</button>
+                <div className="payment-modal-bottom add-address-bottom">
+                    <button id="cancel" type="button" className="btn ">Cancel</button>
+                    <button id="save" type="button" className="btn btn-secondary">Save</button>
                 </div>
             </Modal>
         </div>
@@ -593,7 +592,7 @@ const CountList = ({tl_order = 0, delivery_cost=0, checkout, handlePaymentMethod
             style={customStyles}
             contentLabel="Payment"
             >
-            <div className="modal-top">
+            <div className="modal-top payment-top">
             <h2 ref={_subtitle => (subtitle = _subtitle)}>Payment</h2>
             <button onClick={closeModal}><Close/></button>
             </div>

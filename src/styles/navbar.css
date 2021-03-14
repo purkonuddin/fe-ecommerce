@@ -151,6 +151,7 @@
 
 .nav-link img#auth-img{
   border-radius: 32px;
+  cursor: pointer;
 }
 
 input.form-control {

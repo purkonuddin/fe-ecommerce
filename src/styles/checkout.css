@@ -211,9 +211,7 @@ hr.co-rb-line {
     justify-content: flex-end;
     align-items: center;
     flex-direction: row-reverse;
-    width: 100%;
-    max-width: 500px;
-    min-width: 400px;
+    width: 100%; 
     background: #FFFFFF;
     box-shadow: 0px 0px 6px rgb(53 50 50 / 25%);
     border-radius: 8px 8px 0px 0px;
@@ -299,4 +297,195 @@ hr.co-rb-line {
 .payment-method.mb-4 span {
     position: absolute;
     margin-inline-start: 100px;
+}
+
+/* modal cekout success */
+.modal-checkout {
+    width: 810px;
+    height: 675px;
+}
+
+.modal-top.address-top {
+    display: flex;
+    flex-direction: column-reverse;
+    height: 100px;
+    border: unset;
+    box-shadow: none;
+}
+
+.address-top h2 {
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 28px;
+    color: #222222;
+}
+
+.address-top button {
+    align-self: flex-end;
+    display: flex;
+    border: unset;
+    margin: 10px;
+}
+
+.add-address-btn {
+    height: 86px;
+    border: 1px dashed #9B9B9B;
+    box-sizing: border-box;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+    margin-inline: 25px;
+}
+
+.add-address-btn button {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 18px;
+    color: #9B9B9B;
+    display: contents;
+}
+
+.address-content {
+    background: #FFFFFF;
+    border: 1px solid #DB3022;
+    box-sizing: border-box;
+    border-radius: 4px;
+    margin-inline: 25px;
+    padding: 25px;
+    margin-bottom: 25px;
+
+}
+
+.address-content div {
+
+}
+
+.address-content div h3 {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 16px;
+    color: #222222;
+} 
+
+.address-content div p {
+    font-size: 14px;
+    line-height: 24px;
+}
+
+.address-content div button{
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 16px;
+    color: #DB3022;
+    display: contents;
+}
+
+/* modal payment */
+.modal-top.payment-top {
+    width: 450px;
+    height: 70px;
+}
+
+.add-address-top {
+    width: 810px;
+}
+
+.add-address-content {
+    box-shadow: none;
+}
+
+.add-address-content div {
+    display: flex;
+    flex-direction: column;
+    margin-block-end: 25px;
+    align-items: flex-start;
+    justify-content: center;
+    width: auto;
+}
+
+.add-address-content div label {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #9B9B9B;
+}
+
+.add-address-content div input[type="text"] {
+    border: 1px solid #9B9B9B;
+    box-sizing: border-box;
+    filter: drop-shadow(0px 1px 8px rgba(0, 0, 0, 0.05));
+    border-radius: 4px;
+    height: 48px;
+    width: 100%;
+}
+
+.add-address-content div input[type="radio"] {
+    width: 20px;
+    cursor: pointer;
+    height: 20px;
+    margin-inline-end: 15px;
+}
+
+.add-address-bottom button#cancel {
+    height: 36px;
+    width: 160px;
+    top: 0px;
+    border: 1px solid #9B9B9B;
+    box-sizing: border-box;
+    border-radius: 24px;
+    margin-inline-end: 25px;
+}
+
+.add-address-bottom button#save {
+    height: 36px;
+    width: 160px;
+    background: #DB3022;
+    border-radius: 25px;
+}
+
+.add-address-bottom {
+    box-shadow: none;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+div#receipent, div#address-pos-code {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+div#receipent div, div#address-pos-code div {
+    width: 45%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 0px;
+}
+
+div#city input{
+    width: 45%;
+}
+
+div#true-false {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+div#true-false span {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: -0.15000000596046448px;
+    text-align: left;
+    color: #9B9B9B;
 }
