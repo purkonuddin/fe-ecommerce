@@ -1,22 +1,19 @@
-/* eslint-disable no-unused-vars */
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import '../../styles/checkout.css';
 import { withRouter } from 'react-router-dom';
 import NavbarComp from "../layout/navbar"; 
-import {Empty, GoPay, Mastercard, POS, Close} from '../../assets/properties';
+// import MdlAddAddress from "../layout/add-new-address-modal"; 
+// import {Empty, GoPay, Mastercard, POS, Close} from '../../assets/properties';
 import { getCart, checkout, patchCartList } from '../../redux/actions/checkout'; 
 import {getUserAddress} from '../../redux/actions/user';
 import {payment} from '../../redux/actions/payment';
 import {getPropince, getDestination, postCost} from '../../redux/actions/ongkir';
-// import {URL, KEY, LOGO} from './config';
-import Modal from 'react-modal';
-// import {v4 as uuidv4} from 'uuid';
-// import midtransClient from 'midtrans-client';
-const modalCheckout = {
-    width: '810px',
-    height: '675px'
-}
+import Modal from 'react-modal';  
+import MdlTrsFulfilled from './MdlTrsFulfilled';
+import Address from './Address';
+import CartList from './CartList';
+import CountList from './CountList';
 // modal
 const customStyles = {
     content : {
@@ -120,24 +117,18 @@ class Checkout  extends Component {
             if(this.props.user.getUserAddress.isFulfilled){
                 const alamatUsers = this.props.user.getUserAddress.data.result
                 await this.setAddress()
-                const {username}=this.state;
-                // console.log('@alamatUsers:', alamatUsers);
+                // const {username}=this.state;
                 // set primary address
                 await this.setPrimaryAddress(alamatUsers)
-                // console.log('@primaryAddress: ', this.state.primaryAddress);
-                // await this.onLoadProvince();  
                 // load destination
                 const propinsiId = this.state.primaryAddress.province_id
                 await this.onLoadDestination(propinsiId);
-                const {destinationCities} = this.state;
-                // console.log('@destinationCities:', destinationCities);
+                // const {destinationCities} = this.state;
                 const cityId = this.state.primaryAddress.city_id
                 // set destination city
                 await this.setDestinationCity(cityId)
-                const {selectedDestinationCity} = this.state;
-                // console.log('@selectedDestinationCity: ', selectedDestinationCity);
+                // const {selectedDestinationCity} = this.state;
                 await this.setDestinationToPrimary()
-
                 await this.checkOngkir(); 
             } 
         }else{
@@ -160,11 +151,7 @@ class Checkout  extends Component {
         this.setState({
             primaryAddress:primaryAddress
         })
-    }
-
-    handleLog=()=>{
-        const {primaryAddress} = this.state;
-    }
+    } 
 
     setDestinationCity = async (cityId) => {
         const destinationCities = this.state.destinationCities
@@ -213,7 +200,7 @@ class Checkout  extends Component {
             this.state.weight === 0 ||
             this.state.courier === null
         ){
-            alert('Please fillout the destination city, lengkapi data alamat pengiriman!');
+            alert('Please fillout the destination city!');
         } else {
             const data = {
                 origin: this.state.selectedOriginCity.city_id,
@@ -288,7 +275,6 @@ class Checkout  extends Component {
                 await this.props.dispatch(payment(midtrans, config))
                 this.openModal()
             }
-        
         }
     }
 
@@ -332,45 +318,32 @@ class Checkout  extends Component {
                             <h2>Checkout</h2>
                             <div className="wrap-co-content">
                                 <div className="co-left-box">
-                                    <Address address={address} primaryAddress={primaryAddress}/>
+                                    <Address 
+                                        address={address} 
+                                        primaryAddress={primaryAddress}
+                                        customStyles={customStyles}
+                                        />
                                     <CartList data={cart}/>
                                 </div>
                                 <div className="co-right-box">
-                                    <CountList tl_order= {total} delivery_cost= {ongkir} checkout={() => this.checkout()} handlePaymentMethod={(e)=>this.handlePaymentMethod(e)}/>
+                                    <CountList
+                                        tl_order= {total} 
+                                        delivery_cost= {ongkir} 
+                                        checkout={() => this.checkout()} 
+                                        handlePaymentMethod={(e)=>this.handlePaymentMethod(e)}
+                                        customStyles={customStyles}
+                                    />
                                 </div>
                             </div>
-                            <Modal
-                                isOpen={this.state.modalIsOpen}
-                                onAfterOpen={this.afterOpenModal}
-                                onRequestClose={this.closeModal}
-                                style={ customStyles }
-                                contentLabel="Fulfilled"
-                                >
-                                <div className="modal-top">
-                                <h2>Transaction is Fulfilled</h2>
-                                <button onClick={this.closeModal}><Close/></button>
-                                </div>
-                                
-                                <div className="payment-modal-content">
-                                    <h3 className="mb-4">Order summary</h3>
-                                    <div className="shopping-summary mb-5">
-                                        <p><span># Order ID</span></p>
-                                        <p>Blanja - {this.state.orderDetail.ORDER_ID}</p>
-                                    </div> 
-                                    <div className="shopping-summary mb-4">
-                                        <p>Order Date<span>{this.state.orderDetail.order_date}</span></p>
-                                        <p>Expire Date<span>{this.state.orderDetail.expire_date}</span></p>
-                                        <p>Shipment <span>{this.state.orderDetail.shiping_courir} - REG</span></p>
-                                        <p>Payment Total<span>Rp.{this.state.orderDetail.payment_total}</span></p>
-                                        <p>Payment Type<span>{this.state.orderDetail.payment_type}</span></p>
-                                    </div>
-                                </div>
-
-                                <div className="payment-modal-bottom">
-                                    <a href={`${this.state.paymentUrl}`} target="_blank" rel="noreferrer" className="btn btn-outline-warning w-75">Bayar</a>
-                                    <button type="button" className="btn btn-secondary" onClick={this.closeModal}>Close</button>
-                                </div>
-                            </Modal>
+                            <MdlTrsFulfilled
+                                modalIsOpen={this.state.modalIsOpen}
+                                afterOpenModal={this.afterOpenModal}
+                                closeModal={this.closeModal}
+                                customStyles={customStyles}
+                                contentLabel={"Transaction is Fulfilled"}
+                                orderDetail={this.state.orderDetail}
+                                paymentUrl={this.state.paymentUrl}
+                            />
                         </div> 
                     )
                 }
@@ -395,233 +368,3 @@ const mapStateToProps = (state) => {
   const Nav = withRouter(Checkout);
   
   export default connect(mapStateToProps)(Nav); 
-
-  const Address = ({address, primaryAddress}) => { 
-    const addressCounst = address.length;
-    var subtitle;
-    const [modalIsOpen,setIsOpen] = React.useState(false);
-    const [modalIsOpenAddress,setIsOpenAddress] = React.useState(false);
-    function openModal() {
-        setIsOpen(true);
-    }
-    
-    function afterOpenModal() {
-        // references are now sync'd and can be accessed.
-        // subtitle.style.color = '#f00';
-    }
-    
-    function closeModal(){
-        setIsOpen(false);
-    }
-
-    function openModalAddAddress(){
-        setIsOpenAddress(true)
-    }
-
-    function closeModalAddAddress(){
-        setIsOpenAddress(false)
-    }
-    
-      return (
-        <div id="yourAppElement">
-            <h3>Shipping Adress</h3>
-            {
-                addressCounst > 0 ? (
-                    <>
-                    {address.filter((data) => data.primary_address === 'true').map((address, i) => 
-                        i < 1 &&
-                            <div className="addres" key={i.toString()}>
-                                <p className="subtitle">{address.username}</p>
-                                <p>{address.address}</p>
-                                <button type="button" onClick={openModal}>Choose another address</button>
-                            </div>
-                    )} 
-                    </>
-                ) : (
-                    <div className="addres">
-                        <p>{'belum ada alamat yang ditambahkan'}</p>
-                        <button type="button" onClick={openModal}>+</button>
-                    </div>
-                )
-            }
-            <Modal
-                isOpen={modalIsOpen}
-                onAfterOpen={afterOpenModal}
-                onRequestClose={closeModal}
-                style={customStyles}
-                contentLabel="Choose another address"
-                >
-                <div className="modal-top address-top">
-                    <h2 ref={_subtitle => (subtitle = _subtitle)}>Choose another address</h2>
-                    <button onClick={closeModal}><Close/></button>
-                </div>
-                <div className="add-address-btn" onClick={openModalAddAddress}>
-                    <button type="button">Add new address</button>
-                </div> 
-                <div className="address-content"> 
-                    <div>
-                        <h3>Andreas Jane</h3>
-                        <p>Perumahan Sapphire Mediterania, Wiradadi, Kec. Sokaraja, Kabupaten Banyumas, Jawa Tengah, 53181 [Tokopedia Note: blok c 16] Sokaraja, Kab. Banyumas, 53181</p>
-                        <button type="button">Change address</button>
-                    </div> 
-                </div>
-            </Modal>
-            <Modal
-                isOpen={modalIsOpenAddress}
-                onAfterOpen={afterOpenModal}
-                onRequestClose={closeModalAddAddress}
-                style={customStyles}
-                contentLabel="Add new address"
-                >
-                <div className="modal-top address-top add-address-top">
-                    <h2>Add new address</h2>
-                    <button onClick={closeModalAddAddress}><Close/></button>
-                </div>
-                <div className="payment-modal-content add-address-content"> 
-                    <div id="save-as">
-                        <label>Save address as (ex : home address, office address)</label>
-                        <input type="text"/>
-                    </div> 
-                    <div id="receipent">
-                        <div>
-                            <label>Recipient’s name</label>
-                            <input type="text"/>
-                        </div>
-                        <div>
-                            <label>Recipient's telephone number</label>
-                            <input type="text"/>
-                        </div>
-                    </div>
-                    <div id="address-pos-code">
-                        <div>
-                            <label>Address</label>
-                            <input type="text"/>
-                        </div>
-                        <div>
-                            <label>Postal code</label>
-                            <input type="text"/>
-                        </div>
-                    </div>
-                    <div id="city">
-                        <label>City or Subdistrict</label>
-                        <input type="text"/>
-                    </div> 
-                    <div id="true-false">
-                        <input type="radio" value="true" name="primary_address"/> <span>Make it the primary address</span>
-                    </div> 
-                </div>
-                <div className="payment-modal-bottom add-address-bottom">
-                    <button id="cancel" type="button" className="btn ">Cancel</button>
-                    <button id="save" type="button" className="btn btn-secondary">Save</button>
-                </div>
-            </Modal>
-        </div>
-      )
-  }
-
-const CartList = ({data}) => {
-    return(
-        <div className="item">
-            {data.map((data, i)=>(
-                <div key={i.toString()} className="list-item"> 
-                    <div className="wrap-item-img"> 
-                        {data.product_image === undefined 
-                        ? <img src={Empty} alt={"asda "} width="70px" height="70px"/>
-                        : <img src={data.product_image} alt={"asda "} width="70px" height="70px"/>
-                        }
-                    </div>
-                    <div className="item-description">
-                        <p>{data.product_name} - {data.product_color}</p>
-                        <p className="brand">{data.seller}</p>
-                        <p className="brand">{data.qty} x @ {data.price_aft_disc}</p>
-                    </div>
-                    <div className="item-price">
-                        <p>{data.subtotal}</p>
-                    </div>
-                </div>
-            ))
-            }
-        </div>
-    )
-}
-
-const CountList = ({tl_order = 0, delivery_cost=0, checkout, handlePaymentMethod}) => {
-    const total_payment = tl_order + delivery_cost
-    var subtitle;
-    const [modalIsOpen,setIsOpen] = React.useState(false);
-    function openModal() {
-        setIsOpen(true);
-    }
-    
-    function afterOpenModal() {
-        // references are now sync'd and can be accessed.
-        // subtitle.style.color = '#f00';
-    }
-    
-    function closeModal(){
-        setIsOpen(false);
-    }
-
-    return(
-        <>
-        <p className="co-subtitle">Shopping summary</p>
-            <div className="subtotal-box">
-                <div className="st-b-left">
-                    <p>Order</p>
-                    <p>Delivery</p>
-                </div>
-                <div className="st-b-right">
-                    <p>Rp.{tl_order}</p>
-                    <p>Rp.{delivery_cost}</p>
-                </div>
-            </div>
-            <hr className="co-rb-line"/>
-            <div className="total-box">
-                <div className="tl-b-left">
-                    <p>Shopping summary</p>
-                </div>
-                <div className="tl-b-right">
-                    <p>Rp.{total_payment}</p>
-                </div>
-            </div>
-        <button type="button" onClick={openModal}>Select payment</button>
-        <Modal
-            isOpen={modalIsOpen}
-            onAfterOpen={afterOpenModal}
-            onRequestClose={closeModal}
-            style={customStyles}
-            contentLabel="Payment"
-            >
-            <div className="modal-top payment-top">
-            <h2 ref={_subtitle => (subtitle = _subtitle)}>Payment</h2>
-            <button onClick={closeModal}><Close/></button>
-            </div>
-            
-            <div className="payment-modal-content">
-            <h3 className="mb-4">Payment method</h3>
-            <div>
-                <div className="payment-method mb-4"><img src={POS} alt="pos" height="38"/><span>Pos</span><input type="radio" name="payment-method" value="pos" onClick={handlePaymentMethod}/></div>
-                <div className="payment-method mb-4"><img src={GoPay} className="gopay-img" alt="pos" height="38"/><span>Gopay</span><input type="radio" name="payment-method" value="gopay" onClick={handlePaymentMethod}/></div>
-                <div className="payment-method mb-4"><img src={Mastercard} alt="pos" height="38"/><span>Mastercard</span><input type="radio" name="payment-method" value="mastercard" onClick={handlePaymentMethod}/></div>
-            </div>
-            </div> 
-
-            <div className="payment-modal-content">
-                <h3 className="mb-4">Shopping summary</h3>
-                <div className="shopping-summary mb-4">
-                    <p>Order<span>Rp.{tl_order}</span></p>
-                    <p>Delivery<span>Rp.{delivery_cost}</span></p>
-                </div>
-            </div>
-
-            <div className="payment-modal-bottom">
-                <div>
-                    <p className="mb-0">Shopping summary</p>
-                    <p className="mb-0 price">Rp.{total_payment}</p>
-                </div>
-                <button type="button" className="btn btn-secondary w-50" onClick={checkout}>Buy</button>
-            </div>
-        </Modal>
-        </>
-    )
-}
