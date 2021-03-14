@@ -171,6 +171,14 @@ div#profile {
     background-color: #F5F5F5;
     width: 100%;
   }
+
+#my-order div.Tabs {
+    height: auto;
+    min-height: 500px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+}
   
   .TabList {
     width: 20rem;
@@ -178,6 +186,13 @@ div#profile {
     margin-bottom: 0px;
     padding-top: 100px;
   }
+
+#my-order div.Tabs ul.TabList{
+    width: 100%;
+    padding: 0px;
+    height: fit-content;
+    display: flex;
+}
   
   .TabPanel {
     flex: 1 1;
@@ -189,6 +204,17 @@ div#profile {
     display: block;
     background-color: #F5F5F5;
   }
+
+#my-order div.Tabs div.TabPanel.is-active{
+    display: block;
+    background-color: #fff;
+    width: 100%;
+    padding-inline: 0px;
+    margin-inline: 0px;
+    border-top: 2px #e5e5e5;
+    margin-block: 2px;
+    padding-block: 25px;
+}
   
   .Button {
     display: inline-block;
@@ -219,6 +245,13 @@ div#profile {
     align-items: center;
     justify-content: flex-start;
   }
+
+  #my-order div.Tabs ul.TabList li.Tab.is-active .Button{
+    border-bottom: 5px solid #db3022;
+    background: #FFFFFF;
+    border-radius: 4px;
+  }
+
   .Button span {
     background: transparent;
     margin-inline-start: 25px;
@@ -237,4 +270,77 @@ div#profile {
     border-radius: 4px;
     padding: 10px 20px;
     margin-inline-end: 4px;
+}
+
+/* choose another address */
+.rc-center div.add-new-address {
+    width: 710px;
+    height: 86px;
+    border: 1px dashed #9B9B9B;
+    box-sizing: border-box;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rc-center div.add-new-address button{
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 18px;
+    color: #9B9B9B;
+    display: contents;
+}
+
+.rc-center div.address-list {
+    width: 710px;
+    height: 170px;
+    background: #FFFFFF;
+    border: 1px solid #292625;
+    box-sizing: border-box;
+    border-radius: 4px;
+    padding: 25px;
+}
+
+div.address-list.selected {
+    border: 1px solid #DB3022;
+}
+
+div.address-list h2{
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 16px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #222222;
+}
+
+div.address-list p {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #222222;
+}
+
+div.address-list button {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 16px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #DB3022;
+    display: contents;
+}
+
+div#add-address {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-start;
 }
