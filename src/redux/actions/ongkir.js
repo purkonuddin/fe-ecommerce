@@ -1,6 +1,6 @@
 import axios from 'axios';
 require('dotenv').config();
-const react_app_url = 'http://localhost:8001/api/v1';
+const react_app_url = process.env.REACT_APP_URL; //'http://localhost:8001/api/v1';
 
 export const getPropince = () => { 
 

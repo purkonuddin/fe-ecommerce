@@ -1,7 +1,7 @@
 import axios from 'axios';
 // import 'dotenv/config';
 require('dotenv').config();
-const react_app_url = 'http://localhost:8001/api/v1'; //process.env.REACT_APP_URL
+const react_app_url = process.env.REACT_APP_URL; //process.env.REACT_APP_URL
 
 export const patchCartList = (data, config) => {
   return {
