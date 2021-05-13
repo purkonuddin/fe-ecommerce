@@ -52,3 +52,10 @@ export const resetPassword = (token, data) => {
     }),
   }
 }
+
+export const resetProfile = (data) => {
+  return {
+    type: 'SET_PROFILE',
+    payload: {data:data}
+  }
+}

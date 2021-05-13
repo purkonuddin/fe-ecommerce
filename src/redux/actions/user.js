@@ -15,3 +15,17 @@ export const getUserAddress = (config) => {
       }),
     };
   };
+
+export const updateMyAccount = (formData, config) => {
+  return {
+    type: 'PATCH_MYACCOUNT',
+    payload: axios({
+      method: 'patch',
+      url: `${react_app_url}/user/edit-profile`,
+      headers: {
+        Authorization: config
+      },
+      data: formData
+    })
+  }
+}
