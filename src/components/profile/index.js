@@ -15,9 +15,10 @@ import {
   TabButton,
   TabPanel,
 } from '../layout/Tabs';
-import {updateMyAccount} from '../../redux/actions/user';
+import {updateMyAccount, postUserAddress, getUserAddress} from '../../redux/actions/user';
 import {resetProfile} from '../../redux/actions/auth';
-
+import {getPropince, getDestination} from '../../redux/actions/ongkir';
+// import Loader from "../Loader";
 
 const customStyles = {
   content : {
@@ -49,7 +50,16 @@ class Profile extends React.Component {
       showModal: false,
       token: "",
       myAccount: this.dataUser,
-      isProcess: false
+      isProcess: false,
+      propinsi: [],
+      showPropinsiModal: false,
+      selectedState: '',
+      loadCitiesByState: false,
+      cities: [],
+      selectedCity: '',
+      cityOrSubdistrict: [],
+      userAddress:[],
+      loadUserAddress: false,
     }
   }
 
@@ -67,9 +77,19 @@ class Profile extends React.Component {
   handleOpenModal =()=> {
     this.setState({ showModal: true });
   }
+
+  handleOpenModalPropinsi =()=>{
+    // console.log('show');
+    this.setState({showPropinsiModal: true})
+  }
     
   handleCloseModal =()=> {
     this.setState({ showModal: false });
+  }
+
+  handleCloseModalPropinsi =()=> {
+    // console.log('hide');
+    this.setState({showPropinsiModal: false})
   }
 
   token = async () => {
@@ -84,10 +104,36 @@ class Profile extends React.Component {
     })
   }
 
+  getPropinsi = async() => {
+    await this.props.dispatch(getPropince())
+    if(this.props.ongkir.propince.isFulfilled){ 
+      const dataProp = this.props.ongkir.propince.data.result.rajaongkir.results
+      this.setState({propinsi: dataProp})
+    }
+  }
+
+  getUserAddress = async() => {
+    this.setState({loadUserAddress: true})
+    let config = `Bearer ${this.state.token}`;
+    await this.props.dispatch(getUserAddress(config))
+    await this.sleep(2000)
+    // console.log(this.props);
+    if(this.props.user.getUserAddress.isFulfilled){
+      const dataUserAddrs = this.props.user.getUserAddress.data.result
+      this.setState({
+        userAddress: dataUserAddrs,
+        loadUserAddress: false
+      })
+      // console.log(dataUserAddrs);
+    }
+  }
+
   componentDidMount = async () => {
     if (this.props.auth.isAuthenticated) {
       await this.token()
       await this.myAccount()
+      await this.getUserAddress()
+      await this.getPropinsi()
     }
   }
 
@@ -112,7 +158,75 @@ class Profile extends React.Component {
     this.setState({isProcess: false})
   }
 
+  loadCities = async(propinsiId)=> {
+    // console.log('loadCitiesByState==>',this.state.loadCitiesByState);
+    await this.props.dispatch(getDestination(propinsiId))
+  }
+
+  handleChangeState = async (event)=> {
+    const propinsiId = event.target.value
+    // console.log(propinsiId);
+
+		await this.setState({
+      selectedState: propinsiId,
+      loadCitiesByState: true
+    });
+    
+    await this.loadCities(propinsiId) 
+    if(this.props.ongkir.destination.isFulfilled){
+      const destinations = this.props.ongkir.destination.data.rajaongkir.results;
+      this.setState({
+        loadCitiesByState: false,
+        cities:destinations
+      })
+    }
+	} 
+
+  handleChangeCity = async(event, milliseconds = 2000)=>{
+    const cityId = event.target.value
+    this.setState({
+      selectedCity: cityId
+    })
+    const kota = this.state.cities
+    let selectedKota = []
+    kota.filter(element => element.city_id === cityId).map(selected =>
+       (
+          selectedKota = [...selectedKota, selected]
+        ) 
+    )
+    await this.sleep(milliseconds)
+    this.setState({cityOrSubdistrict: selectedKota})
+  }
+
+  sleep = (milliseconds) => {
+    return new Promise((resolve) => setTimeout(resolve, milliseconds));
+  };
+
+  handleSubmitFormAddress = async (data)=> {
+    this.setState({isProcess: true})
+    let config = `Bearer ${this.state.token}`;
+    let formData = new FormData();
+    formData.append('customer_id', data.customer_id);
+    formData.append('save_address_as', data.save_address_as);
+    formData.append('address', data.address);
+    formData.append('primary_address', data.primary_address);
+    formData.append('city_id', data.city_id);
+    formData.append('province_id', data.province_id);
+    formData.append('city_name', data.city_name);
+    formData.append('province_name', data.province_name);
+    formData.append('recipient_name', data.recipient_name);
+    formData.append('recipient_phone_number', data.recipient_phone_number);
+    formData.append('postal_code', data.postal_code);
+    await this.props.dispatch(postUserAddress(data, config))
+    await this.sleep(2000)
+    await this.getUserAddress()
+    await this.sleep(2000)
+    this.setState({isProcess: false})
+    this.handleCloseModal()
+  }
+
   render(){
+    // console.log('userAddress ', this.state.userAddress);
 
   return (
     <>
@@ -142,11 +256,33 @@ class Profile extends React.Component {
 
             <TabPanel>
               <Address 
+                userData={this.state.myAccount}
+                loadUserAddress={this.state.loadUserAddress}
+                userAddress={this.state.userAddress}
+                
                 handleOpenModal={this.handleOpenModal}
                 modalIsOpenAddress={this.state.showModal}
                 afterOpenModal={this.afterOpenModal}
                 closeModalAddAddress={this.handleCloseModal}
-                customStyles={customStyles}/>
+                customStyles={customStyles}
+
+                dataPropinsi={this.state.propinsi}                
+                modalIsOpenPropinsi={this.state.showPropinsiModal}
+                handleOpenModalPropinsi={this.handleOpenModalPropinsi}
+                handleCloseModalPropinsi={this.handleCloseModalPropinsi}
+                
+                selectedState={this.state.selectedState}
+                handleChangeState={this.handleChangeState}
+                loadCitiesByState={this.state.loadCitiesByState}
+                cities={this.state.cities}
+                selectedCity={this.state.selectedCity}
+                handleChangeCity={this.handleChangeCity}
+
+                selectedCityOrSubdistrict={this.state.cityOrSubdistrict}
+
+                handleSubmitFormAddress={this.handleSubmitFormAddress} 
+                progressStatus={this.state.isProcess}
+                />
             </TabPanel>
 
             <TabPanel>
@@ -180,6 +316,8 @@ const mapStateToProps = (state) => {
     auth: state.auth,
     product: state.product,
     checkout: state.checkout,
+    ongkir: state.ongkir,
+    user: state.user,
   };
 };
 

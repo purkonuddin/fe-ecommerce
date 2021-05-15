@@ -15,7 +15,7 @@ export const getPropince = () => {
 export const getDestination = (propincy_id) => { 
 
     return {
-      type: 'GET_DESTINATIO',
+      type: 'GET_DESTINATION',
       payload: axios({ 
         method: 'GET',
         url: `${react_app_url}/ongkir/kota/${propincy_id}`, 

@@ -29,3 +29,17 @@ export const updateMyAccount = (formData, config) => {
     })
   }
 }
+
+export const postUserAddress = (formData, config) => {
+  return {
+    type: 'POST_ADDRESS',
+    payload: axios({
+      method: 'post',
+      url: `${react_app_url}/user/customer-address`,
+      headers: {
+        Authorization: config
+      },
+      data: formData
+    })
+  }
+}

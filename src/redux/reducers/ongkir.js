@@ -76,7 +76,7 @@ export default function (state = initialState, action) {
                     data:{},
                 }
             }
-        case 'GET_DESTINATIO_REJECTED':
+        case 'GET_DESTINATION_REJECTED':
             return {
                 ...state, 
                 destination: {
@@ -94,7 +94,7 @@ export default function (state = initialState, action) {
                     data:{},
                 }
             }
-        case 'GET_DESTINATIO_FULFILLED':
+        case 'GET_DESTINATION_FULFILLED':
             return {
                 ...state,  
                 destination: {

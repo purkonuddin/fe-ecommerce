@@ -24,6 +24,46 @@ const initialState = {
 
 export default function (state = initialState, action) {
     switch (action.type) {
+        case 'POST_ADDRESS_PENDING':
+            return {
+                ...state,
+                postUserAddress: {
+                    isFulfilled: false,
+                    isPending: true,
+                    isRejected: false,
+                    rejected: {},
+                    data:{},
+                }
+            }
+        case 'POST_ADDRESS_REJECTED':
+            return {
+                ...state,
+                postUserAddress: {
+                    isFulfilled: false,
+                    isPending: false,
+                    isRejected: true,
+                    rejected: action.payload.response === undefined
+                    ? action.payload.isAxiosError 
+                        ? { status: action.payload.request.status, message: "Network to Api's Service is Error" } 
+                        : { status: action.payload.request.status, message: action.payload.message }
+                    :{
+                        status: action.payload.response.status,
+                        message: action.payload.response.data.message
+                    },
+                    data:{},
+                }
+            }
+        case 'POST_ADDRESS_FULFILLED':
+            return {
+                ...state,
+                postUserAddress: {
+                    isFulfilled: true,
+                    isPending: false,
+                    isRejected: false,
+                    rejected: {},
+                    data: action.payload.data.result,
+                }
+            }
         case 'PATCH_MYACCOUNT_PENDING':
             return {
                 ...state,
