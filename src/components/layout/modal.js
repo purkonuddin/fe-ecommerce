@@ -46,7 +46,7 @@ ModalPop.defaultProps = {
     </>
   };
 
-ModalPop.propTypes = {
-  };
+// ModalPop.PropTypes = {
+//   };
 
 export {ModalPop}

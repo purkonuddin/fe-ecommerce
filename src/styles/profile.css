@@ -194,16 +194,18 @@ div#profile {
     display: flex;
 }
   
-  .TabPanel {
+.TabPanel {
     flex: 1 1;
     display: none;
     padding: 0 2rem;
     margin-inline: 25px;
-  }
-  .TabPanel.is-active {
+    overflow: visible;
+    height: fit-content;
+}
+.TabPanel.is-active {
     display: block;
     background-color: #F5F5F5;
-  }
+}
 
 #my-order div.Tabs div.TabPanel.is-active{
     display: block;

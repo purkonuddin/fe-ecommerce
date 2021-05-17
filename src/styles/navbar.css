@@ -152,8 +152,8 @@
 .nav-link img#auth-img{
   border-radius: 32.29px;
   cursor: pointer;
-  background-color: #ffffff!important;
-  box-shadow: 0px 0px 6px 3px #adb5bd;
+  background-color: #adb5bd!important;
+  box-shadow: 0px 0px 1px 1px #adb5bd;
   padding: 0.5px;
 }
 

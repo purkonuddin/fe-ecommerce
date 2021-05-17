@@ -5,7 +5,7 @@ import {customer} from '../../assets/properties';
 
 const MyProfile = ({userData, handleSaveMyAccount, progressStatus}) => { 
   const data = userData;
-  // console.log('data: ', data.user_name);
+  // console.log('data: ', data);
   const [userName, setUserName] = React.useState(data.user_name);
   const [userEmail, setUserEmail] = React.useState(data.user_email);
   const [userPhone, setUserPhone] = React.useState(data.user_phone === 'null' ? '' : data.user_phone || '');
@@ -123,24 +123,12 @@ const MyProfile = ({userData, handleSaveMyAccount, progressStatus}) => {
                   onChange={onGenderChange}
                   /> <span> Perempuan </span>
               </p>
-              <div className="date">
-              {/* <select>
-                <option value="1">{'1'}</option>
-                {[1,2,3,4,5,6,7,8].map(d => <option key={d}>{d}</option>)}
-              </select>  */}
+              <div className="date"> 
               <DatePicker
                 onChange={handleChange}
                 selected={dateOfBirth}
                 dateFormat="dd/MM/yyyy"
-              /> 
-              {/* <select>
-                <option value="Januari">{'Januari'}</option>
-                {['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus', 'Sepetember', 'Oktober', 'Nopember', 'Desember'].map(m => <option key={m}>{m}</option>)}
-              </select>
-              <select>
-                <option value="1990">{'1990'}</option>
-                {[1990,1991,1992,1993,1994,1995,1996,1997].map(y => <option key={y}>{y}</option>)}
-              </select>  */}
+              />  
               </div>
             </div>
           </div>

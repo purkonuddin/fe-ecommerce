@@ -2,12 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import '../../styles/profile.css'; 
-import {customer, Vector,Clipboard1,Mapin1, User1} from '../../assets/properties';
+import {customer, Vector,Clipboard1,Mapin1, User1, Store, Product, Order, SideBottom, SideUp} from '../../assets/properties';
 import NavbarComp from "../layout/navbar"; 
 import "react-datepicker/dist/react-datepicker.css";
 import MyProfile from './MyProfile';
 import MyOrder from './MyOrder';
 import Address from './Address';
+import MyStore from './MyStore';
+import MyProduct from './MyProduct';
+import OrderSeller from './OrderSeller';
 import {
   Tabs,
   TabList,
@@ -15,10 +18,19 @@ import {
   TabButton,
   TabPanel,
 } from '../layout/Tabs';
+
+import { MyTabs, MyTabList, MyTab, MySubTabList, MySubTab, MyTabButton,MyButton } from '../layout/My-tabs';
 import {updateMyAccount, postUserAddress, getUserAddress} from '../../redux/actions/user';
 import {resetProfile} from '../../redux/actions/auth';
 import {getPropince, getDestination} from '../../redux/actions/ongkir';
 // import Loader from "../Loader";
+import {
+  SellingProduct,
+  Inventory,
+  ItemDetails,
+  PhotoOfGoods,
+  Description, 
+} from './SellingProduct'
 
 const customStyles = {
   content : {
@@ -48,19 +60,44 @@ class Profile extends React.Component {
     this.state = {
       startDate: new Date(),
       showModal: false,
-      token: "",
+      token: null,
       myAccount: this.dataUser,
       isProcess: false,
       propinsi: [],
       showPropinsiModal: false,
-      selectedState: '',
+      selectedState: null,
       loadCitiesByState: false,
       cities: [],
-      selectedCity: '',
+      selectedCity: null,
       cityOrSubdistrict: [],
       userAddress:[],
       loadUserAddress: false,
+      loadMyAccount: false,
+      accountType: null,
+      showMenu: false,
     }
+
+    this.showMenu = this.showMenu.bind(this);
+    this.closeMenu = this.closeMenu.bind(this);
+  }
+
+  setShowMenu(){
+    this.setState({ showMenu: true }, () => {
+      document.addEventListener('click', this.closeMenu);
+    });
+  }
+
+  showMenu(event) {
+    event.preventDefault();
+    return () => this.setShowMenu() 
+  }
+
+
+  
+  closeMenu() {
+    this.setState({ showMenu: false }, () => {
+      document.removeEventListener('click', this.closeMenu);
+    });
   }
 
   handleChange = (date, event) => {
@@ -98,10 +135,13 @@ class Profile extends React.Component {
     });
   };
 
-  myAccount = async () => {
-    this.setState({
+  myAccount = async () => { 
+    this.setState({ 
       myAccount: await this.props.auth.profile,
+      accountType: await this.props.auth.profile.account_type
     })
+    this.sleep(5000)
+    this.setState({loadMyAccount: false})
   }
 
   getPropinsi = async() => {
@@ -131,6 +171,7 @@ class Profile extends React.Component {
   componentDidMount = async () => {
     if (this.props.auth.isAuthenticated) {
       await this.token()
+      // this.setState({loadMyAccount: true})
       await this.myAccount()
       await this.getUserAddress()
       await this.getPropinsi()
@@ -225,11 +266,21 @@ class Profile extends React.Component {
     this.handleCloseModal()
   }
 
+  /**
+   * 
+   * @returns My Store Profile
+   */
+
+   handleSaveMyStore = async(data) => {
+    console.log(data);
+   }
+
   render(){
     // console.log('userAddress ', this.state.userAddress);
 
   return (
     <>
+      <>
       <NavbarComp/>
 
       <div className="profile-container" id="profile">  
@@ -237,14 +288,14 @@ class Profile extends React.Component {
             <TabList>
                 <TabHeader userData={this.state.myAccount}/>
               <Tab>
-                <TabButton><img src={User1} alt="asdf" width="32" height="32"/><span>My Account</span></TabButton>
+                <TabButton><img src={User1} alt="asdf" width="32" height="32"/><span>My Account </span></TabButton>
               </Tab>
               <Tab>
                 <TabButton><img src={Mapin1} alt="asdf" width="32" height="32"/> <span> Shipping Adrress</span></TabButton>
               </Tab>
               <Tab>
                 <TabButton><img src={Clipboard1} alt="asdf" width="32" height="32"/><span> My order</span></TabButton>
-              </Tab> 
+              </Tab>  
             </TabList>
 
             <TabPanel>
@@ -287,9 +338,66 @@ class Profile extends React.Component {
 
             <TabPanel>
               <MyOrder/>
-            </TabPanel>
+            </TabPanel> 
           </Tabs> 
       </div>
+      </>
+      <>
+      <MyTabs 
+        selected={"11"} 
+        selectedTab={"Store"} 
+        _style={{
+          height: "fit-content",
+          paddingBlockEnd: "5em"
+        }}
+        >
+        <MyTabList> 
+          <TabHeader userData={this.state.myAccount}/>
+          <MyTab> 
+            <MyButton icon={Store} name={"Store"}>Store</MyButton>
+            <MySubTabList parentname={"Store"}>
+              <MySubTab><MyTabButton><span>Store profile</span></MyTabButton></MySubTab>
+            </MySubTabList> 
+          </MyTab> 
+          <MyTab>
+            <MyButton icon={Product} name={"Product"}>Product</MyButton>
+            <MySubTabList parentname={"Product"}>
+              <MySubTab><MyTabButton><span>My products</span></MyTabButton></MySubTab>
+              <MySubTab><MyTabButton><span>Selling products</span></MyTabButton></MySubTab> 
+            </MySubTabList> 
+          </MyTab>
+          <MyTab>
+            <MyButton icon={Order} name={"Order"}>Order</MyButton>
+              <MySubTabList parentname={"Order"}>
+                <MySubTab><MyTabButton><span>My order</span></MyTabButton></MySubTab>
+                <MySubTab><MyTabButton><span>Order cancel</span></MyTabButton></MySubTab>
+              </MySubTabList>  
+          </MyTab>
+        </MyTabList>
+        <TabPanel _id={"11"}>
+          <MyStore 
+            progressStatus={false}   
+            handleSaveMyStore={this.handleSaveMyStore}/> 
+        </TabPanel>
+        <TabPanel _id={"21"}>
+          <MyProduct/>
+        </TabPanel>
+        <TabPanel _id={"22"}>
+          <SellingProduct>
+            <Inventory></Inventory>
+            <ItemDetails></ItemDetails>
+            <PhotoOfGoods></PhotoOfGoods>
+            <Description></Description>
+          </SellingProduct>
+        </TabPanel>
+        <TabPanel _id={"31"}>
+          <OrderSeller selected={0}/>
+        </TabPanel>
+        <TabPanel _id={"32"}>
+          <OrderSeller selected={5}/>
+        </TabPanel> 
+      </MyTabs>
+      </>
     </>
   )}
 }

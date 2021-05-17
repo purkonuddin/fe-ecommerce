@@ -15,7 +15,7 @@ import { ReactComponent as Star22 } from './star-22.svg';
 import { ReactComponent as Close } from './close.svg';
 import { ReactComponent as SearchField } from './SearchField.svg';
 import { ReactComponent as NoNotifiYet } from './no-notifi-yet.svg';
-import { ReactComponent as Vector } from './Vector.svg';
+import { ReactComponent as Vector } from './Vector.svg'; 
 import Clipboard1 from './orderpin.png';
 import Mapin1 from './mappin.png';
 import User1 from './accountpin.png';
@@ -26,6 +26,12 @@ import  notification from './Group-1306.png';
 import  GoPay from './Logo-GoPay.png';
 import  POS from './Logo-POS.png';
 import  Mastercard from './Logo-Mastercard.png';
+import  Store from './store.png';
+import  Order from './order.PNG';
+import  Product from './product.PNG';
+import  SideBottom from './side-bottom.png';
+import  SideUp from './side-up.png';
+import  ProductPrev from './ProductPrev.PNG';
 export {
     logo,
     SearchSvg, 
@@ -55,4 +61,10 @@ export {
     Mastercard,
     POS,
     GoPay,
+    Store,
+    Order,
+    Product,
+    SideBottom,
+    SideUp,
+    ProductPrev,
 };

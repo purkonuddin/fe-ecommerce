@@ -7,23 +7,25 @@ import {
     TabPanel,
   } from '../layout/Tabs';
   
-const MyOrder = () => {
+const OrderSeller = ({
+    selected
+}) => {
     return (
       <div className="wrap-right-content">
         <div>
           <h3>My order</h3>
         </div>
         <div className="rc-center" id="my-order">
-          <Tabs selected={ 0 }>
+          <Tabs selected={ selected }>
             <TabList>
               <Tab>
                 <TabButton>All items</TabButton>
               </Tab>
               <Tab>
-                <TabButton>Not yet paid</TabButton>
+                <TabButton>Get paid</TabButton>
               </Tab>
               <Tab>
-                <TabButton>Packed</TabButton>
+                <TabButton>Processed</TabButton>
               </Tab>
               <Tab>
                 <TabButton>Sent</TabButton>
@@ -59,4 +61,4 @@ const MyOrder = () => {
       </div>
     )
   }
-export default MyOrder;  
+export default OrderSeller;  

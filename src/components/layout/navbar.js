@@ -10,20 +10,50 @@ import {SearchSvg, FilterSvg, ShopingCartSvg, BellSvg, MailSvg, LogoSvg, custome
 import {ModalPop} from './modal';
 import '../../styles/navbar.css' 
 
-const CheckBox = props => {
+const CheckBox = (props) => {
+  const {
+    keyValue,
+    inputId,
+    value,
+    handleCheckChieldElement,
+    styles,
+    isChecked,
+  }= props
+
   return (
-    <div className={props.styles}>
-      <input id={`${props.inputId}-${props.value}`} onChange={props.handleCheckChieldElement} type="checkbox" checked={props.isChecked} value={props.value} /> 
-      <button type="button"  style={props.isChecked ? {backgroundColor:'#DB3022', color:'#FFFFFF'} : {backgroundColor:'#FFFFFF',  color:'#000000'}}>{props.value}</button>
+    <div className={styles} key={keyValue}>
+      <input
+      //  id={`${inputId}-${value}`} 
+       onChange={handleCheckChieldElement} 
+       type="checkbox" 
+       checked={isChecked} 
+       value={value} /> 
+      <button type="button"  style={isChecked ? {backgroundColor:'#DB3022', color:'#FFFFFF'} : {backgroundColor:'#FFFFFF',  color:'#000000'}}>{value}</button>
     </div> 
   )
 }
 
-const CheckBoxColor = props => {
+const CheckBoxColor = (props) => {
+  const {
+    keyValue,
+    styles,
+    handleCheckChieldElement,
+    isChecked,
+    value,
+  } = props
+
   return (
-    <div className={props.styles}>
-      <input id={`${props.inputId}-${props.value}`} onChange={props.handleCheckChieldElement} type="checkbox" checked={props.isChecked} value={props.value} /> 
-      <button type="button"  style={{backgroundColor:`#${props.value}`}}>{' '}</button>
+    <div className={styles} key={keyValue}>
+      <input key={keyValue}
+        // id={`${props.inputId}-${props.value}`} 
+        onChange={handleCheckChieldElement} 
+        type="checkbox" 
+        checked={isChecked} 
+        value={value} /> 
+        <button 
+          type="button"  
+          style={{backgroundColor:`#${value}`}}>{' '}
+        </button>
     </div> 
   )
 }
@@ -249,8 +279,15 @@ class NavbarComp extends Component {
                   </div>
                   <div className="filter-content">
                   {
-                    this.state.colors.map((color) => {
-                      return (<CheckBoxColor key={color.id.toString()} inputId={"color-toggle"} styles={color.isChecked ? "color-container ellipse" : "color-container"} handleCheckChieldElement={this.handleCheckColorsChieldElement}  {...color} />)
+                    this.state.colors.map((color, key) => {
+                      return (
+                        <CheckBoxColor 
+                          keyValue={key} 
+                          inputId={"color-toggle"} 
+                          styles={color.isChecked ? "color-container ellipse" : "color-container"} 
+                          handleCheckChieldElement={this.handleCheckColorsChieldElement}  
+                          {...color} />
+                      )
                     })
                   }
                   </div> 
@@ -263,8 +300,14 @@ class NavbarComp extends Component {
                   </div>
                   <div className="filter-content">
                   { 
-                    this.state.sizes.map((size) => {
-                      return (<CheckBox key={size.id.toString()} inputId={"size-toggle"} styles={"size-container"} handleCheckChieldElement={this.handleCheckSizesChieldElement}  {...size} />)
+                    this.state.sizes.map((size, key) => {
+                      return (
+                        <CheckBox 
+                          keyValue={key} 
+                          inputId={"size-toggle"} 
+                          styles={"size-container"} 
+                          handleCheckChieldElement={this.handleCheckSizesChieldElement}  
+                          {...size} />)
                     })
                   }
                   </div>
@@ -276,12 +319,19 @@ class NavbarComp extends Component {
                   </div>
                   <div className="filter-content">
                     <div className="category-container"> 
-                      <input id="category-toggle" type="checkbox" value="All" checked={this.state.checked}  onChange={this.handleAllCategories}/>
+                      <input name="category-toggle" type="checkbox" value="All" checked={this.state.checked}  onChange={this.handleAllCategories}/>
                       <button style={this.state.checked ? {backgroundColor:'red'}: {backgroundColor:'#FFFFFF'}}>All</button>
                     </div> 
                     { 
-                      this.state.categories.map((category) => {
-                        return (<CheckBox key={category.id.toString()}  inputId={"category-toggle"} styles={"category-container"} handleCheckChieldElement={this.handleCheckCategoriesChieldElement}  {...category} />)
+                      this.state.categories.map((category, key) => {
+                        return (
+                          <CheckBox 
+                            keyValue={key}  
+                            inputId={"category-toggle"} 
+                            styles={"category-container"} 
+                            handleCheckChieldElement={this.handleCheckCategoriesChieldElement}  
+                            {...category} />
+                        )
                       })
                     }
                   </div>
@@ -304,7 +354,7 @@ class NavbarComp extends Component {
                     <div className="category-container">
                       { 
                         <select 
-                          id="brand" 
+                          name="brand" 
                           className="form-control select2" 
                           value={this.state.selections} 
                           onChange={(e) => {
