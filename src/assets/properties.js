@@ -32,6 +32,7 @@ import  Product from './product.PNG';
 import  SideBottom from './side-bottom.png';
 import  SideUp from './side-up.png';
 import  ProductPrev from './ProductPrev.PNG';
+import  nastha from './nastha.PNG';
 export {
     logo,
     SearchSvg, 
@@ -67,4 +68,5 @@ export {
     SideBottom,
     SideUp,
     ProductPrev,
+    nastha,
 };

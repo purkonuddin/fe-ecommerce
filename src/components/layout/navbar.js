@@ -33,18 +33,15 @@ const CheckBox = (props) => {
   )
 }
 
-const CheckBoxColor = (props) => {
-  const {
-    keyValue,
-    styles,
-    handleCheckChieldElement,
-    isChecked,
-    value,
-  } = props
-
-  return (
-    <div className={styles} key={keyValue}>
-      <input key={keyValue}
+const CheckBoxColor = ({
+  _key,
+  styles,
+  handleCheckChieldElement,
+  isChecked,
+  value,
+}) => {  
+    <div className={styles} key={_key}>
+      <input
         // id={`${props.inputId}-${props.value}`} 
         onChange={handleCheckChieldElement} 
         type="checkbox" 
@@ -54,8 +51,7 @@ const CheckBoxColor = (props) => {
           type="button"  
           style={{backgroundColor:`#${value}`}}>{' '}
         </button>
-    </div> 
-  )
+    </div>  
 }
 
 const defaultFilters = {
@@ -279,15 +275,18 @@ class NavbarComp extends Component {
                   </div>
                   <div className="filter-content">
                   {
-                    this.state.colors.map((color, key) => {
-                      return (
-                        <CheckBoxColor 
-                          keyValue={key} 
-                          inputId={"color-toggle"} 
-                          styles={color.isChecked ? "color-container ellipse" : "color-container"} 
-                          handleCheckChieldElement={this.handleCheckColorsChieldElement}  
-                          {...color} />
-                      )
+                    this.state.colors.map((color, i) => {
+                      return (<div className={color.isChecked ? "color-container ellipse" : "color-container"} key={i}>
+                        <input
+                          onChange={this.handleCheckColorsChieldElement} 
+                          type="checkbox" 
+                          checked={color.isChecked} 
+                          value={color.value} /> 
+                          <button 
+                            type="button"  
+                            style={{backgroundColor:`#${color.value}`}}>{' '}
+                          </button>
+                      </div>)   
                     })
                   }
                   </div> 
@@ -300,14 +299,17 @@ class NavbarComp extends Component {
                   </div>
                   <div className="filter-content">
                   { 
-                    this.state.sizes.map((size, key) => {
+                    this.state.sizes.map((size, i) => { 
                       return (
-                        <CheckBox 
-                          keyValue={key} 
-                          inputId={"size-toggle"} 
-                          styles={"size-container"} 
-                          handleCheckChieldElement={this.handleCheckSizesChieldElement}  
-                          {...size} />)
+                        <div className={"size-container"} key={i}>
+                          <input 
+                           onChange={this.handleCheckSizesChieldElement} 
+                           type="checkbox" 
+                           checked={size.isChecked} 
+                           value={size.value} /> 
+                          <button type="button"  style={size.isChecked ? {backgroundColor:'#DB3022', color:'#FFFFFF'} : {backgroundColor:'#FFFFFF',  color:'#000000'}}>{size.value}</button>
+                        </div> 
+                      )
                     })
                   }
                   </div>
@@ -323,15 +325,15 @@ class NavbarComp extends Component {
                       <button style={this.state.checked ? {backgroundColor:'red'}: {backgroundColor:'#FFFFFF'}}>All</button>
                     </div> 
                     { 
-                      this.state.categories.map((category, key) => {
-                        return (
-                          <CheckBox 
-                            keyValue={key}  
-                            inputId={"category-toggle"} 
-                            styles={"category-container"} 
-                            handleCheckChieldElement={this.handleCheckCategoriesChieldElement}  
-                            {...category} />
-                        )
+                      this.state.categories.map((category, i) => { 
+                        return (<div className={"category-container"} key={i}>
+                          <input 
+                          onChange={this.handleCheckCategoriesChieldElement} 
+                          type="checkbox" 
+                          checked={category.isChecked} 
+                          value={category.value} /> 
+                          <button type="button"  style={category.isChecked ? {backgroundColor:'#DB3022', color:'#FFFFFF'} : {backgroundColor:'#FFFFFF',  color:'#000000'}}>{category.value}</button>
+                        </div> )
                       })
                     }
                   </div>
@@ -355,15 +357,13 @@ class NavbarComp extends Component {
                       { 
                         <select 
                           name="brand" 
-                          className="form-control select2" 
+                          className="form-control select2 w-100" 
                           value={this.state.selections} 
                           onChange={(e) => {
-                            // console.log(e.target.value);
                             this.onSeletionChange(e.target.value); 
                           } }
                           title="brand"
                           multiple={true}>
-                          {/* <option value="" key="">Select</option> */}
                           {(this.state.brands !== undefined) &&
                             this.state.brands.map((brand, key) =>
                               <option key={key} value={brand.value}>{brand.name}</option>
@@ -394,7 +394,6 @@ class NavbarComp extends Component {
           
           <Nav>
             <Nav.Link href="/checkout" style={{fontSize:'12px'}}><ShopingCartSvg/><Badge variant="light">{cartnumber}</Badge></Nav.Link>
-            {/* <button className="btn"><ShopingCartSvg/></button> */}
 
             {this.props.auth.isAuthenticated 
               ? <>
@@ -420,16 +419,12 @@ class NavbarComp extends Component {
               : <> 
                 <Link
                   className="btn btn-secondary btn-block btn-block-nav"
-                  id=""
-                  // onClick={this.onLogin.bind(this)}
                   to="/login"
                 >
                     Login
                 </Link>
                 <Link
                   className="btn btn-outline-secondary btn-block-nav"
-                  id=""
-                  // onClick={this.onSignup.bind(this)}
                   to="/sign-up"
                 >
                     Signup

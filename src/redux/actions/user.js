@@ -3,6 +3,33 @@ import axios from 'axios';
 require('dotenv').config();
 const react_app_url = process.env.REACT_APP_URL; //'http://localhost:8001/api/v1';
 
+export const createMyStore = (formData, config)=> {
+  return {
+    type: 'POST_MYSTORE',
+    payload: axios({
+      method: 'post',
+      url: `${react_app_url}/user/my-store`,
+      headers: {
+        Authorization: config
+      },
+      data: formData
+    })
+  }
+}
+
+export const getMyStore = (config) => {  
+  return {
+    type: 'GET_MYSTORE',
+    payload: axios({
+      method: 'GET',
+      url: `${react_app_url}/user/my-store`,
+      headers: {
+          Authorization: config,
+        }, 
+    }),
+  };
+};
+
 export const getUserAddress = (config) => {  
     return {
       type: 'GET_USERADDRESS',
@@ -14,7 +41,7 @@ export const getUserAddress = (config) => {
           }, 
       }),
     };
-  };
+};
 
 export const updateMyAccount = (formData, config) => {
   return {

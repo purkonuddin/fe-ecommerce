@@ -6,7 +6,7 @@ import NavbarComp from "../layout/navbar";
 // import MdlAddAddress from "../layout/add-new-address-modal"; 
 // import {Empty, GoPay, Mastercard, POS, Close} from '../../assets/properties';
 import { getCart, checkout, patchCartList } from '../../redux/actions/checkout'; 
-import {getUserAddress} from '../../redux/actions/user';
+import {getUserAddress, postUserAddress} from '../../redux/actions/user';
 import {payment} from '../../redux/actions/payment';
 import {getPropince, getDestination, postCost} from '../../redux/actions/ongkir';
 import Modal from 'react-modal';  
@@ -14,6 +14,9 @@ import MdlTrsFulfilled from './MdlTrsFulfilled';
 import Address from './Address';
 import CartList from './CartList';
 import CountList from './CountList';
+import Loader from '../Loader';
+import {customer} from '../../assets/properties';
+
 // modal
 const customStyles = {
     content : {
@@ -32,7 +35,7 @@ const customStyles = {
   // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement('#root');
 
-class Checkout  extends Component {
+class Checkout extends Component {
     constructor(props) {
         super(props); 
         this.state = {
@@ -47,35 +50,25 @@ class Checkout  extends Component {
             provinces: [],
             originCities: [],
             destinationCities: [],
-            selectedOriginProvince: {
-                province_id : "6",
-                province : "DKI Jakarta"
-            },
-            selectedOriginCity: {
-                city_id : "155",
-                province_id : "6",
-                province : "DKI Jakarta",
-                type : "Kota",
-                city_name : "Jakarta Utara",
-                postal_code: "14140"
-            },
+            selectedOriginProvince: this.props.selectedOriginProvince,
+            selectedOriginCity: this.props.selectedOriginCity,
             selectedDestinationProvince: null,
             selectedDestinationCity: null,
             weight: 0,
             courier: null,
             showModal: false,
             payment_type:'',
-            primaryAddress:{},
+            primaryAddress:this.props.primaryAddress,
             modalIsOpen: false,
             paymentUrl: '/',
-            orderDetail: {
-                ORDER_ID: '0000',
-                order_date: new Date().toLocaleDateString(),
-                expire_date: new Date().toLocaleDateString(),
-                payment_total: '0000',
-                payment_type: 'cash',
-                shiping_courir: 'Kurir'
-            }
+            orderDetail: this.props.orderDetail,
+            loadingCart: true,
+            loadingAddress: true,
+            loadPropinsi: true,
+            loadDestination: true,
+            myAccount: this.props.dataUser,
+            cities:[],
+            cityOrSubdistrict:[],
         };
     }
 
@@ -88,7 +81,7 @@ class Checkout  extends Component {
     }
 
     handleAddress = () => {
-
+        
     }
 
     token = async () => {
@@ -96,13 +89,13 @@ class Checkout  extends Component {
           token: await this.props.auth.profile.token,
           username: await this.props.auth.profile.user_name,
         });
-      };
+    };
 
-    componentDidMount = async () => {  
-        if(this.props.auth.isAuthenticated){
-            await this.token();
-            const config = `Bearer ${this.state.token}`;
-            await this.props.dispatch(getCart(config))
+    fetchingCart = async () => {
+        this.setState({loadingCart: true})
+        const config = `Bearer ${this.state.token}`;
+        await this.props.dispatch(getCart(config))
+        if(this.props.checkout.getCart.isFulfilled){
             this.setState({
                 cart: this.props.checkout.getCart.data.result,
                 total: this.props.checkout.getCart.data.result.reduce(
@@ -111,26 +104,49 @@ class Checkout  extends Component {
                         0
                 ),
                 weight: 500 * this.props.checkout.getCart.data.result.length,
-                courier: 'jne',
+                courier: this.props.courier,
             })
-            await this.props.dispatch(getUserAddress(config))
-            if(this.props.user.getUserAddress.isFulfilled){
-                const alamatUsers = this.props.user.getUserAddress.data.result
-                await this.setAddress()
-                // const {username}=this.state;
-                // set primary address
-                await this.setPrimaryAddress(alamatUsers)
-                // load destination
-                const propinsiId = this.state.primaryAddress.province_id
-                await this.onLoadDestination(propinsiId);
-                // const {destinationCities} = this.state;
-                const cityId = this.state.primaryAddress.city_id
-                // set destination city
-                await this.setDestinationCity(cityId)
-                // const {selectedDestinationCity} = this.state;
-                await this.setDestinationToPrimary()
-                await this.checkOngkir(); 
-            } 
+        }
+        this.setState({loadingCart: false})
+    }
+
+    fetchingUserAdress = async () => {
+        this.setState({loadingAddress: true})
+        const config = `Bearer ${this.state.token}`;
+        await this.props.dispatch(getUserAddress(config))
+        if(this.props.user.getUserAddress.isFulfilled){
+            // user.getUserAddress.data.result
+            // primary_address
+            const alamatUsers = this.props.user.getUserAddress.data.result
+            await this.setAddress() 
+            await this.setPrimaryAddress(alamatUsers)
+            const propinsiId = this.state.primaryAddress.province_id
+            await this.onLoadDestination(propinsiId);
+            const cityId = this.state.primaryAddress.city_id
+            await this.setDestinationCity(cityId)
+            await this.setDestinationToPrimary()
+            await this.checkOngkir(); 
+        } 
+        this.setState({loadingAddress: false})
+    }
+
+    myAccount = async () => { 
+        this.setState({loadMyAccount: true})
+        this.setState({ 
+          myAccount: await this.props.auth.profile,
+          accountType: await this.props.auth.profile.account_type
+        })
+        this.sleep(5000)
+        this.setState({loadMyAccount: false})
+    }
+
+    componentDidMount = async () => {  
+        if(this.props.auth.isAuthenticated){
+            await this.myAccount()
+            await this.token(); 
+            await this.fetchingCart() 
+            await this.fetchingUserAdress()
+            await this.getPropinsi()
         }else{
             this.props.history.push('/');
         }
@@ -177,20 +193,24 @@ class Checkout  extends Component {
         })
     }
 
-    onLoadProvince = async () => {
-       await this.props.dispatch(getPropince());
-
-       this.setState({
-        provinces: this.props.ongkir.propince.data
-       })
-    };
+    getPropinsi = async() => {
+        this.setState({loadPropinsi: true})
+        await this.props.dispatch(getPropince())
+        if(this.props.ongkir.propince.isFulfilled){ 
+          const dataProp = this.props.ongkir.propince.data.result.rajaongkir.results
+          this.setState({provinces: dataProp})
+        }
+        this.setState({loadPropinsi: false})
+    } 
 
     onLoadDestination = async (province_id)=>{
+        this.setState({loadDestination: true})
         await this.props.dispatch(getDestination(province_id)); 
         this.setState({
             destinationCities: await this.props.ongkir.destination.data.rajaongkir.results,
             originCities: await this.props.ongkir.destination.data.rajaongkir.results,
         })
+        this.setState({loadDestination: false})
     }
 
     checkOngkir = async () => { 
@@ -304,25 +324,116 @@ class Checkout  extends Component {
         this.props.history.push('/');
     }
 
+    /**
+     * 
+     * @returns this section for handle modal add address
+     */
+    handleChangePropinsi = async (event)=> {
+        let propinsiId = event.target.value
+        this.setState({
+          selectedState: propinsiId,
+          loadCitiesByState: true
+        });
+        
+        await this.loadCities(propinsiId) 
+        if(this.props.ongkir.destination.isFulfilled){
+          const destinations = this.props.ongkir.destination.data.rajaongkir.results;
+          this.setState({
+            loadCitiesByState: false,
+            cities:destinations
+          })
+        }
+    } 
+
+    loadCities = async(propinsiId)=> {
+        await this.props.dispatch(getDestination(propinsiId))
+    }
+
+    handleChangeCity = async(event, milliseconds = 2000)=>{
+        const cityId = event.target.value
+        this.setState({
+          selectedCity: cityId
+        })
+        const kota = this.state.cities
+        let selectedKota = []
+        kota.filter(element => element.city_id === cityId).map(selected =>
+           (
+              selectedKota = [...selectedKota, selected]
+            ) 
+        )
+        await this.sleep(milliseconds)
+        this.setState({cityOrSubdistrict: selectedKota})
+    }
+    
+    sleep = (milliseconds) => {
+        return new Promise((resolve) => setTimeout(resolve, milliseconds));
+    };
+
+    handleSubmitFormAddress = async (data)=> {
+        this.setState({isProcess: true})
+        let config = `Bearer ${this.state.token}`;
+        let formData = new FormData();
+        formData.append('customer_id', data.customer_id);
+        formData.append('save_address_as', data.save_address_as);
+        formData.append('address', data.address);
+        formData.append('primary_address', data.primary_address);
+        formData.append('city_id', data.city_id);
+        formData.append('province_id', data.province_id);
+        formData.append('city_name', data.city_name);
+        formData.append('province_name', data.province_name);
+        formData.append('recipient_name', data.recipient_name);
+        formData.append('recipient_phone_number', data.recipient_phone_number);
+        formData.append('postal_code', data.postal_code);
+        await this.props.dispatch(postUserAddress(data, config))
+        await this.sleep(2000)
+        await this.fetchingUserAdress()
+        await this.sleep(2000)
+        this.setState({isProcess: false})
+        this.handleCloseModal()
+    }
+    
+
     render(){
         const {cart, address, primaryAddress, ongkir, total } = this.state 
+        console.log(address, primaryAddress);
         return (
             <div className="app">
                 <NavbarComp page={"product"}/>
-                { this.props.checkout.getCart.isRejected ? (
+                { this.state.loadingCart ? (
                         <div><p>{`Status: ${this.props.checkout.getCart.rejected.status}, Message: ${this.props.checkout.getCart.rejected.message}`}</p></div>
                     ) : this.props.checkout.getCart.isPending ? (
-                        <div><p>Loading...</p></div>
+                        <Loader/>
                     ) : (
                         <div className="checkout-box">
                             <h2>Checkout</h2>
                             <div className="wrap-co-content">
                                 <div className="co-left-box">
-                                    <Address 
-                                        address={address} 
-                                        primaryAddress={primaryAddress}
+                                    {this.state.loadingAddress ? (
+                                        <Loader/>
+                                    ) : (
+                                        <>
+                                        <Address 
+                                        userData={this.state.myAccount}
+                                        currAddress={address} 
+                                        currPrimaryAddress={primaryAddress}
                                         customStyles={customStyles}
+                                        propinsi={this.state.provinces}
+                                        loadingPropinsi={this.state.loadingPropinsi}
+                                        handleChangeState={this.handleChangePropinsi}
+                                        selectedState={this.state.selectedPropinsi}
+                                        loadCitiesByState={this.state.loadCitiesByPropinsi}
+                                        selectedCity={this.state.selectedCity}
+                                        handleChangeCity={this.handleChangeCity}
+                                        cities={this.state.cities}
+                                        selectedCityOrSubdistrict={this.state.cityOrSubdistrict}
+                                        handleSubmitFormAddress={this.handleSubmitFormAddress}
+                                        progressStatus={this.state.isProcess}
+
+                                        loadUserAddress={this.state.loadUserAddress}
                                         />
+                                        </>
+                                    )}
+                                    
                                     <CartList data={cart}/>
                                 </div>
                                 <div className="co-right-box">
@@ -342,7 +453,7 @@ class Checkout  extends Component {
                                 customStyles={customStyles}
                                 contentLabel={"Transaction is Fulfilled"}
                                 orderDetail={this.state.orderDetail}
-                                paymentUrl={this.state.paymentUrl}
+                                paymentUrl={this.state.paymentUrl} 
                             />
                         </div> 
                     )
@@ -352,6 +463,52 @@ class Checkout  extends Component {
             </div>
         )
     }
+}
+
+Checkout.defaultProps = {
+    selectedOriginProvince: {
+        province_id : "6",
+        province : "DKI Jakarta"
+    },
+    selectedOriginCity: {
+        city_id : "155",
+        province_id : "6",
+        province : "DKI Jakarta",
+        type : "Kota",
+        city_name : "Jakarta Utara",
+        postal_code: "14140"
+    },
+    orderDetail: {
+        ORDER_ID: '0000',
+        order_date: new Date().toLocaleDateString(),
+        expire_date: new Date().toLocaleDateString(),
+        payment_total: '0000',
+        payment_type: 'cash',
+        shiping_courir: 'Kurir'
+    },
+    courier: "jne",
+    primaryAddress: {
+        address: "",
+        city_id: 78,
+        city_name: "",
+        customer_id: "",
+        id: 9,
+        postal_code: "",
+        primary_address: "false",
+        province_id: 9,
+        province_name: "",
+        recipient_name: "",
+        recipient_phone_number: "",
+        save_address_as: "",
+    },
+    dataUser: {
+        account_type: "",   
+        user_email: "",
+        user_id: "",
+        user_image: customer,
+        user_name: "Name",
+        user_store: "Blanja"
+      },
 }
 
 const mapStateToProps = (state) => {

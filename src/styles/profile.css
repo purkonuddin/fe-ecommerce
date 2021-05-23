@@ -166,10 +166,12 @@ div#profile {
   }
   
   .Tabs {
-    height: 100vh;
+    min-height: 100vh;
+    height: fit-content;
     display: flex; 
     background-color: #F5F5F5;
     width: 100%;
+    padding-block-end: 5em;
   }
 
 #my-order div.Tabs {

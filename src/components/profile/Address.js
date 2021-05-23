@@ -1,5 +1,5 @@
 import React from 'react'; 
-import MdlAddAddress from "../layout/add-new-address-modal"; 
+import MdlAddAddress from "./add-new-address-modal"; 
 import Modal from 'react-modal';
 import {Close} from '../../assets/properties';
 import Loader from "../Loader";
@@ -62,71 +62,64 @@ const Address = (props) => {
 
     const [saveBtnEnabled, setSaveBtnEnabled] = React.useState(true)
 
+    const [showModal, setShowModal] = React.useState(false)
+    const handleOpenModalAddAddress = () => {
+      setShowModal(true)
+    }
+    const handleCloseModalAddAddress =()=> {
+      setShowModal(false)
+    }
+
+    React.useEffect(()=>{
+
+    },[showModal])
+
     React.useEffect(()=>{ 
       const disabled = selectedCityOrSubdistrict.length === 0 ? true : false 
       setSaveBtnEnabled(disabled);
     },[selectedCityOrSubdistrict]) 
 
-    const handleFormAddress = () => {
+    const handleFormAddress = (data) => {
+      console.log(data);
       if(selectedCityOrSubdistrict.length === 0){
         alert('city or subdistrict, Please fulfilled')
-        return false
-      }
-
-      if(customerId === ''){
-        alert('customer Id, Please fulfilled')
-        return false
-      }
-
-      if(saveAddressAs === ''){
-        alert('save Address As, Please fulfilled')
-        return false
-      }
-
-      if(address === ''){
-        alert('Address, Please fulfilled')
-        return false
-      }
-
-      if(postalCode === ''){
-        alert('postal Code, Please fulfilled')
         return false
       } 
 
       const dataForm = {
         customer_id: customerId,
-        save_address_as: saveAddressAs,
-        address: address,
-        primary_address: primaryAddress || 'false',
+        save_address_as: data.saveAddressAs.value,
+        address: data.address.value,
+        primary_address: data.primaryAddress || 'false',
         city_id: selectedCityOrSubdistrict[0].city_id,
         province_id: selectedCityOrSubdistrict[0].province_id,
         city_name: `${selectedCityOrSubdistrict[0].type} ${selectedCityOrSubdistrict[0].city_name}`,
         province_name: selectedCityOrSubdistrict[0].province,
-        recipient_name: recipientName,
-        recipient_phone_number: recipientPhoneNumber,
-        postal_code: postalCode
+        recipient_name: data.recipientName.value,
+        recipient_phone_number: data.recipientPhoneNumber.value,
+        postal_code: data.postalCode.value
       }
 
       // console.log(dataForm);
       handleSubmitFormAddress(dataForm)
     }
 
-    console.log(
-      saveAddressAs,
-      recipientName,
-      recipientPhoneNumber,
-      address,
-      postalCode,
-      primaryAddress,
-      cityId,
-      provinceId,
-      cityName,
-      provinceName,
-      saveBtnEnabled,
-      selectedCityOrSubdistrict.length,
-      loadUserAddress,
-      userAddress.length
-    );
+    // console.log(
+    //   saveAddressAs,
+    //   recipientName,
+    //   recipientPhoneNumber,
+    //   address,
+    //   postalCode,
+    //   primaryAddress,
+    //   cityId,
+    //   provinceId,
+    //   cityName,
+    //   provinceName,
+    //   saveBtnEnabled,
+    //   selectedCityOrSubdistrict.length,
+    //   loadUserAddress,
+    //   userAddress.length
+    // );
   
     return (
       <div className="wrap-right-content">
@@ -138,7 +131,7 @@ const Address = (props) => {
         <div className="rc-center">
           <div id="add-address">
             <div className="add-new-address mb-4 mt-4">
-              <button type="button" onClick={handleOpenModal}>Add new address</button>
+              <button type="button" onClick={handleOpenModalAddAddress}>Add new address</button>
             </div> 
             {loadUserAddress && 
               <div className="address-list selected">
@@ -165,7 +158,7 @@ const Address = (props) => {
         <MdlAddAddress 
           modalIsOpenAddress={modalIsOpenAddress}
           afterOpenModal={afterOpenModal}
-          closeModalAddAddress={closeModalAddAddress}
+          closeModalAddAddress={handleCloseModalAddAddress}
           customStyles={customStyles}
           contentLabel={"Add new address"}
 
@@ -200,6 +193,8 @@ const Address = (props) => {
           handleFormAddress={handleFormAddress}
           progressStatus={progressStatus}
           saveBtnEnabled={saveBtnEnabled}
+
+          selectedCityOrSubdistrict={selectedCityOrSubdistrict}
           />
       </div>
     )

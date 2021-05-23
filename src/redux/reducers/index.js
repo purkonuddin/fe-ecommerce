@@ -8,6 +8,7 @@ import slide from "./slide";
 import ongkir from "./ongkir";
 import filter from "./filter";
 import payment from "./payment";
+import nastha from "./nastha";
 export default combineReducers({
   product,
   category,
@@ -18,4 +19,5 @@ export default combineReducers({
   ongkir,
   filter,
   payment,
+  nastha,
 });

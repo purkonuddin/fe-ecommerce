@@ -5,32 +5,245 @@ import { convertToHTML } from 'draft-convert';
 import DOMPurify from 'dompurify';
 import { EditorState, ContentState, convertToRaw } from 'draft-js';
 import {ProductPrev} from '../../assets/properties';
+import Loader from "../Loader";
+import { validateFields } from './Validation';
+import classnames from 'classnames';
 
 class SellingProduct extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
             selected: this.props.selected,
-            selectedTab: this.props.selectedTab
+            selectedTab: this.props.selectedTab,
+            namaProduct: {
+                value: '',
+                validateOnChange: false,
+                error: ''
+            }, 
+            unitePrice: {
+                value: '',
+                validateOnChange: false,
+                error: ''
+            }, 
+            stock: {
+                value: '',
+                validateOnChange: false,
+                error: ''
+            },
+            images:[],
+            description: '',
+            submitCalled:false,
+            allFieldsValidated: false,
+            resetInput: false,
+            isfulfilled: this.props.isfulfilled
         }
     }
 
-    renderChildren(children) {
-        return React.Children.map(children, (child) => { 
-            return child
+    resetForm=()=>{
+        this.setState({
+            namaProduct: {
+                value: '',
+                validateOnChange: false,
+                error: ''
+            }, 
+            unitePrice: {
+                value: '',
+                validateOnChange: false,
+                error: ''
+            }, 
+            stock: {
+                value: '',
+                validateOnChange: false,
+                error: ''
+            },
+            images:[],
+            description: '',
+            resetInput:true
         })
     }
 
+    componentDidUpdate=()=> {
+        if(this.props.product.postProduct.isFulfilled) {
+            // this.resetForm()
+            console.log('reset form prd', this.props);
+            console.log('reset isProcess', this.props.isProcess);
+        }
+    }
+
+    handleSubmit=(evt)=> { 
+        evt.preventDefault();
+        // validate all fields
+        const {namaProduct, unitePrice, stock, images, description } = this.state
+        const namaProductError = validateFields.validateName(namaProduct.value);
+        const unitePriceError = validateFields.validateName(unitePrice.value);
+        const stockError = validateFields.validateName(stock.value);
+        const imagesError = images.length<=0 ? true : false;
+        const descriptionError = description.length<=0 ? true : false;
+        if ([namaProductError, unitePriceError,stockError, imagesError, descriptionError].every(e => e === false)) {
+          // no errors submit the form
+          console.log('success');
+          let AinitialState = this.state
+    
+          // clear state and show all fields are validated
+          this.setState({ ...AinitialState, allFieldsValidated: true });
+          this.showAllFieldsValidated();
+          this.props.handleFormInserProduct({
+            namaProduct,
+            unitePrice,
+            stock,
+            images,
+            description, 
+          })
+        } else {
+          // update the state with errors
+          this.setState(state => ({
+            namaProduct: {
+                ...state.namaProduct,
+                validateOnChange: true,
+                error: namaProductError
+            },
+            unitePrice: {
+                ...state.unitePrice,
+              validateOnChange: true,
+              error: unitePriceError
+            },
+            stock:{
+                ...state.stock,
+                validateOnChange: true,
+                error: stockError
+            }, 
+          })); 
+        }
+    }
+    
+    showAllFieldsValidated=()=> {
+        setTimeout(() => {
+            this.setState({ allFieldsValidated: false });
+        }, 1500);
+    }
+
+    handleBlur(validationFunc, evt) {
+        const field = evt.target.name;
+        // validate onBlur only when validateOnChange for that field is false
+        // because if validateOnChange is already true there is no need to validate onBlur
+        if (
+          this.state[field]['validateOnChange'] === false &&
+          this.state.submitCalled === false
+        ) {
+          this.setState(state => ({
+            [field]: {
+              ...state[field],
+              validateOnChange: true,
+              error: validationFunc(state[field].value)
+            }
+          }));
+        }
+        return;
+    }
+
+    handleChange=(validationFunc, evt) => {
+        const field = evt.target.name;
+        const fieldVal = evt.target.value;
+        this.setState(state => ({
+          [field]: {
+            ...state[field],
+            value: fieldVal,
+            error: state[field]['validateOnChange'] ? validationFunc(fieldVal) : ''
+          }
+        }));
+    }
+
+    // renderChildren(children) {
+    //     return React.Children.map(children, (child) => { 
+    //         return child
+    //     })
+    // }
+
+    componentDidMount = async () => {
+        console.log('props:', this.props);
+    }
+
     render() {
+        const {namaProduct, stock, unitePrice, images, description } = this.state
+        // console.log(namaProduct, stock, unitePrice, images, description);
         return (
-          <>
-            { this.renderChildren(this.props.children) }
-          </>
+          <form onSubmit={evt => this.handleSubmit(evt)}>
+            {/* { this.renderChildren(this.props.children) } */}
+            <Inventory>
+                <input
+                    type="text"
+                    name="namaProduct"
+                    placeholder=""
+                    value={namaProduct.value}
+                    className={classnames(
+                        'form-control p-2 text-capitalize',
+                        { 'is-valid': namaProduct.error === false },
+                        { 'is-invalid': namaProduct.error }
+                      )}
+                    required
+                    onChange={evt =>this.handleChange(validateFields.validateName, evt)}
+                    onBlur={evt => this.handleBlur(validateFields.validateName, evt)}/>
+                <div className="bg-transparent invalid-feedback mb-4">{namaProduct.error}</div>
+            </Inventory>
+            <ItemDetails>
+                <div className="sc1-input">
+                    <p> <label>Unit price</label></p>
+                    <input
+                        type="text"
+                        name="unitePrice"
+                        placeholder=""
+                        value={unitePrice.value}
+                        className={classnames(
+                            'form-control p-2 text-capitalize',
+                            { 'is-valid': unitePrice.error === false },
+                            { 'is-invalid': unitePrice.error }
+                          )}
+                        required
+                        onChange={evt =>this.handleChange(validateFields.validateName, evt)}
+                        onBlur={evt => this.handleBlur(validateFields.validateName, evt)}/>
+                    <div className="bg-transparent invalid-feedback mb-4">{unitePrice.error}</div>
+                </div><br/>
+                <div className="sc1-input">
+                    <p> <label>Stock</label></p>
+                    <input
+                        type="text"
+                        name="stock"
+                        placeholder=""
+                        value={stock.value}
+                        className={classnames(
+                            'form-control p-2 text-capitalize',
+                            { 'is-valid': stock.error === false },
+                            { 'is-invalid': stock.error }
+                          )}
+                        required
+                        onChange={evt =>this.handleChange(validateFields.validateName, evt)}
+                        onBlur={evt => this.handleBlur(validateFields.validateName, evt)}/>
+                    <div className="bg-transparent invalid-feedback mb-4">{stock.error}</div>
+                </div>
+            </ItemDetails>
+            <PhotoOfGoods setImages={(val)=>this.setState({images: val})}/> 
+            <Description setDescription={(val)=> this.setState({description: val})}/> 
+            <div className="position-relative wrap-right-content" 
+            style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                display: "flex"
+            }}>
+                <button type="submit" className="btn btn-primary" 
+                    disabled={false}
+                    onMouseDown={() => this.setState({ submitCalled: true })}>Save
+                </button>
+            </div>
+          </form>
         )
     }
 }
 
-const Description = ({ children }) => {
+const Description = ({ 
+    setDescription,
+    children 
+}) => {
     let _contentState = ContentState.createFromText('Sample content state');
     const raw = convertToRaw(_contentState)
     const [storeDescription, setStoreDescription] = React.useState('');
@@ -45,7 +258,8 @@ const Description = ({ children }) => {
 
     const convertContentToHTML = () => {
         let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
-        setStoreDescription(currentContentAsHTML);
+        setStoreDescription(currentContentAsHTML); 
+        setDescription(currentContentAsHTML)
     }
 
     const createMarkup = (html) => {
@@ -53,6 +267,19 @@ const Description = ({ children }) => {
           __html: DOMPurify.sanitize(html)
         }
     }
+
+    // if(resetForm){
+    //     setStoreDescription('')
+    //     setDescription('')
+    // }
+
+    // React.useEffect(()=>{ 
+    //     if(resetForm){
+    //         setStoreDescription('')
+    //         setDescription('')
+    //     }
+    // },[storeDescription, resetForm, setDescription])
+
     return(
     <div className="wrap-right-content">
         <div>
@@ -65,11 +292,16 @@ const Description = ({ children }) => {
                 editorState={editorState}
                 onEditorStateChange={handleEditorChange}
                 wrapperClassName="wrapper-class"
-                editorClassName="editor-class"
+                // editorClassName="editor-class"
+                editorClassName = {classnames(
+                    'editor-class form-control',
+                    { 'is-valid': storeDescription.length > 50 ? true : false },
+                    { 'is-invalid':storeDescription.length < 50 ? true : false }
+                  )}
                 toolbarClassName="toolbar-class"
                 />
         </div>
-        <div className="preview" dangerouslySetInnerHTML={createMarkup(storeDescription)}></div>
+        {/* <div className="preview" dangerouslySetInnerHTML={createMarkup(storeDescription)}></div> */}
     </div>
     )
 }
@@ -86,13 +318,7 @@ const Inventory = ({ children }) => {
         <div className="rc-center" id="Inventory">
             <div className="sc1-input">
                 <p> <label>Name of goods</label></p>
-                <input
-                    type="text"
-                    name="name_of_good"
-                    placeholder=""
-                    value={namaProduct}
-                    onChange={(e)=>setNamaProduct(e.target.value)}
-                />
+                {children} 
             </div>
         </div>
     </div>
@@ -109,31 +335,15 @@ const ItemDetails = ({ children }) => {
         </div>
         <hr/>
         <div className="" id="ItemDetails">
-            <div className="sc1-input">
-                <p> <label>Unit price</label></p>
-                <input
-                    type="text"
-                    name="unit_price"
-                    placeholder=""
-                    value={unitePrice}
-                    onChange={(e)=>setUnitPrice(e.target.value)}
-                />
-            </div><br/>
-            <div className="sc1-input">
-                <p> <label>Stock</label></p>
-                <input
-                    type="text"
-                    name="name_of_good"
-                    placeholder=""
-                    value={stock}
-                    onChange={(e)=>setStock(e.target.value)}
-                />
-            </div>
+            {children}
         </div>
     </div>
 )}
 
-const PhotoOfGoods = ({ children }) => {
+const PhotoOfGoods = ({ 
+    setImages,
+    children 
+}) => {
     const hiddenImagesInput = React.useRef(null);
     const [previewImages, setPreviewImages] = React.useState([]);
     const [selectedFiles, setSelectedFiles] = React.useState(undefined);
@@ -144,7 +354,8 @@ const PhotoOfGoods = ({ children }) => {
             images.push(URL.createObjectURL(event.target.files[i]))
         }
         setPreviewImages(images)
-        setSelectedFiles(event.target.files)
+        // setSelectedFiles(event.target.files)
+        setImages(event.target.files)
     };
 
     const handleClickSelectImage = event => {
@@ -153,7 +364,13 @@ const PhotoOfGoods = ({ children }) => {
 
     React.useEffect(()=>{ 
         console.log(selectedFiles);
-    }, [])
+    }, [selectedFiles])
+
+    // React.useEffect(()=>{ 
+    //     if(resetForm){
+    //         setPreviewImages([])
+    //     }
+    // }, [resetForm])
 
     return (
     <div className="wrap-right-content">
@@ -183,7 +400,7 @@ const PhotoOfGoods = ({ children }) => {
                 {previewImages.map((img, i) => {
                     if (i === 0) {
                         return (
-                            <div style={{
+                            <div key={i} style={{
                                 width: "fit-content",
                                 display: "flex",
                                 alignItems: "center",
@@ -223,6 +440,7 @@ const PhotoOfGoods = ({ children }) => {
                     if (i === 0) {
                         return (
                             <div
+                                key={i}
                                 className="preview" 
                                 style={{
                                     width: "fit-content",
@@ -279,9 +497,5 @@ const PhotoOfGoods = ({ children }) => {
 )}
 
 export {
-    SellingProduct, 
-    Inventory,
-    ItemDetails,
-    PhotoOfGoods,
-    Description, 
+    SellingProduct 
 }

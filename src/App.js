@@ -62,7 +62,6 @@ function App() {
               <Route path="/category/:categori_id" component={Category} />
               <Route path="/checkout" component={Checkout} />
               <Route path="/profile" component={Profile} />
-              {/* <Route path="/history" component={History} /> */} 
               <Route exact path="/search" component={SearchPage} />
               <Route component={notFound} />
             </Switch>
