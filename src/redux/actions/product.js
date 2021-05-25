@@ -34,16 +34,17 @@ export const getProductById = (id) => {
     }
 }
   
-  export const postProduct = (data, config) => {
+  export const postProduct = (fd, config) => {
     return {
       type: 'POST_PRODUCT',
       payload: axios({
         method: 'POST',
         url: `${react_app_url}/products`,
         headers: {
-          Authorization: config
+          Authorization: config,
+          'content-type': 'multipart/form-data'
         },
-        data: data,
+        data: fd,
       }),
     };
   };

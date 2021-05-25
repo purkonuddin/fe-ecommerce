@@ -79,5 +79,6 @@
   "license": "MIT",
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "devDependencies": {},
-  "author": "purkonuddin"
+  "author": "purkonuddin",
+  "repository": "https://github.com/purkonuddin/fe-ecommerce.git"
 }

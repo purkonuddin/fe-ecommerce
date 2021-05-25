@@ -29,10 +29,10 @@
 #wrap-product-list .prod-image-box {
     width: 208px;
     height: 136px;
-    background: url('../assets/store.png');
+    background: url('../assets/product.PNG');
     background-color: antiquewhite;
     background-position: center;
-    background-size: 100px;
+    background-size: cover;
     background-repeat: no-repeat;
     border-radius: 8px 8px 0 0;
     justify-content: center;

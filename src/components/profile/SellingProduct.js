@@ -1,4 +1,6 @@
 import React from 'react'; 
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { Editor } from "react-draft-wysiwyg";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { convertToHTML } from 'draft-convert';
@@ -9,10 +11,19 @@ import Loader from "../Loader";
 import { validateFields } from './Validation';
 import classnames from 'classnames';
 
+const initialProducts = {
+    namaProduct: "",
+    unitePrice:"",
+    stock:"",
+    images: [], // (array of strings)   
+    description:""
+};
+
 class SellingProduct extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
+            products: initialProducts,
             selected: this.props.selected,
             selectedTab: this.props.selectedTab,
             namaProduct: {
@@ -71,6 +82,7 @@ class SellingProduct extends React.Component{
     }
 
     handleSubmit=(evt)=> { 
+        console.log('handleSubmit',evt);
         evt.preventDefault();
         // validate all fields
         const {namaProduct, unitePrice, stock, images, description } = this.state
@@ -87,15 +99,11 @@ class SellingProduct extends React.Component{
           // clear state and show all fields are validated
           this.setState({ ...AinitialState, allFieldsValidated: true });
           this.showAllFieldsValidated();
-          this.props.handleFormInserProduct({
-            namaProduct,
-            unitePrice,
-            stock,
-            images,
-            description, 
-          })
+          this.props.handleFormInserProduct(this.state.products)
         } else {
           // update the state with errors
+          console.log('canceled', this.state);
+
           this.setState(state => ({
             namaProduct: {
                 ...state.namaProduct,
@@ -122,6 +130,10 @@ class SellingProduct extends React.Component{
         }, 1500);
     }
 
+    sleep = (milliseconds) => {
+        return new Promise((resolve) => setTimeout(resolve, milliseconds));
+    };
+
     handleBlur(validationFunc, evt) {
         const field = evt.target.name;
         // validate onBlur only when validateOnChange for that field is false
@@ -141,6 +153,13 @@ class SellingProduct extends React.Component{
         return;
     }
 
+    handleInput = (e) => {
+        let updateValues = { ...this.state.products };
+        updateValues[e.target.name] = e.target.value;
+        this.setState({products: updateValues});
+        console.log("Update input values", updateValues);
+    };
+
     handleChange=(validationFunc, evt) => {
         const field = evt.target.name;
         const fieldVal = evt.target.value;
@@ -151,13 +170,31 @@ class SellingProduct extends React.Component{
             error: state[field]['validateOnChange'] ? validationFunc(fieldVal) : ''
           }
         }));
+        this.handleInput(evt)
     }
 
-    // renderChildren(children) {
-    //     return React.Children.map(children, (child) => { 
-    //         return child
-    //     })
-    // }
+    handleMultipleImages = (e) => {
+        console.log("handleMultipleImages",e.target.files);
+        // if (e.length > 0) {
+        let updateValues = { ...this.state.products };
+        updateValues.images = e.target.files;
+        this.setState({
+            images: e.target.files,
+            products: updateValues
+        });
+        console.log("Update input values", updateValues);
+        // }
+    };
+
+    handleDeskription=(val)=>{
+        let updateValues = { ...this.state.products };
+        updateValues.description = val;
+        this.setState({
+            description:val,
+            products: updateValues
+        });
+        console.log("Update input values", updateValues);
+    } 
 
     componentDidMount = async () => {
         console.log('props:', this.props);
@@ -167,7 +204,7 @@ class SellingProduct extends React.Component{
         const {namaProduct, stock, unitePrice, images, description } = this.state
         // console.log(namaProduct, stock, unitePrice, images, description);
         return (
-          <form onSubmit={evt => this.handleSubmit(evt)}>
+          <form onSubmit={evt => this.handleSubmit(evt)} enctype="multipart/form-data">
             {/* { this.renderChildren(this.props.children) } */}
             <Inventory>
                 <input
@@ -221,8 +258,18 @@ class SellingProduct extends React.Component{
                     <div className="bg-transparent invalid-feedback mb-4">{stock.error}</div>
                 </div>
             </ItemDetails>
-            <PhotoOfGoods setImages={(val)=>this.setState({images: val})}/> 
-            <Description setDescription={(val)=> this.setState({description: val})}/> 
+            <PhotoOfGoods setImages={this.handleMultipleImages}/> 
+            {/* <div>
+                <input 
+                    className="form-control"
+                    type="file"  
+                    name="images" 
+                    multiple 
+                    accept="image/*"
+                    onChange={evt=>this.handleMultipleImages(evt)}
+                />
+            </div> */}
+            <Description setDescription={this.handleDeskription}/> 
             <div className="position-relative wrap-right-content" 
             style={{
                 flexDirection: "row",
@@ -349,13 +396,14 @@ const PhotoOfGoods = ({
     const [selectedFiles, setSelectedFiles] = React.useState(undefined);
 
     const handleChangeImage = event => {
+        setImages(event)
+
         let images = [];
         for (let i = 0; i < event.target.files.length; i++) {
             images.push(URL.createObjectURL(event.target.files[i]))
         }
         setPreviewImages(images)
         // setSelectedFiles(event.target.files)
-        setImages(event.target.files)
     };
 
     const handleClickSelectImage = event => {
@@ -479,8 +527,8 @@ const PhotoOfGoods = ({
                     }}
                     onClick={handleClickSelectImage}>Select image</button>
                 <input 
-                    type="file" 
-                    encType="multipart/form-data" 
+                    className="form-control"
+                    type="file"  
                     name="images" 
                     ref={hiddenImagesInput}
                     multiple 
@@ -496,6 +544,14 @@ const PhotoOfGoods = ({
     </div>
 )}
 
-export {
-    SellingProduct 
-}
+// export default SellingProduct 
+
+const mapStateToProps = (state) => {
+    return {
+      product: state.product
+    };
+};
+  
+const Nav = withRouter(SellingProduct);
+  
+export default connect(mapStateToProps)(Nav);

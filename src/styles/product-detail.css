@@ -274,10 +274,10 @@ p.product-price{
     width: 85%;
     height: 100%;
     max-height: 400px;
-    background: url('../assets/store.png');
+    background: url('../assets/product.PNG');
     background-color: antiquewhite;
     background-position: center;
-    background-size: 100px;
+    background-size: contain;
     background-repeat: no-repeat;
     border-radius: 8px 8px 0 0;
     justify-content: center;

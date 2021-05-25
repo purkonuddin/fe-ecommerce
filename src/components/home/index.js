@@ -62,7 +62,7 @@ class Home extends Component {
            <CategoryComp categories={this.props.category.getCategories.data}/>
           } 
           {this.state.searchTerm !== '' &&
-            <Product title="Search" subtitle="hasil pencarian berdasarkan nama product" data={currentlyDisplayed} sortBy="product_name" limit={10} searchTerm={searchTerm}/> 
+            <Product title="Search" subtitle="hasil pencarian berdasarkan nama product" data={currentlyDisplayed} sortBy="product_name" limit={100} searchTerm={searchTerm}/> 
           }
           { this.props.product.isRejected ? (
             <div><p>{`Status: ${this.props.product.rejected.status}, Message: ${this.props.product.rejected.message}`}</p></div>
