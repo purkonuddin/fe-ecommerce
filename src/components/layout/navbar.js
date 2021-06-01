@@ -227,7 +227,7 @@ class NavbarComp extends Component {
 
   render() {
     const {user, windowWidth} = this.state;
-    const {searchTerm, cartsnumber} = this.props;
+    const {searchTerm, cartsnumber, handleSearchTerm} = this.props;
     const lebar = windowWidth > this.mediaQuery.phone 
                   ? '500' 
                   : windowWidth > this.mediaQuery.tablet 
@@ -259,7 +259,7 @@ class NavbarComp extends Component {
               : (
                 <>
                   <FormControl type="text" placeholder="product's name, descriptions, seller" onChange={searchTerm}/>
-                  <button type="button" className="btn btn-search-svg" onClick={this.handleToSearchPage.bind(this)}>
+                  <button type="button" className="btn btn-search-svg" onClick={handleSearchTerm}>
                     <SearchSvg/>
                   </button>
                 </>

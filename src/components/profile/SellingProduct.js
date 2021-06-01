@@ -10,6 +10,7 @@ import {ProductPrev} from '../../assets/properties';
 import Loader from "../Loader";
 import { validateFields } from './Validation';
 import classnames from 'classnames';
+import {postProduct} from '../../redux/actions/product';
 
 const initialProducts = {
     namaProduct: "",
@@ -42,11 +43,16 @@ class SellingProduct extends React.Component{
                 error: ''
             },
             images:[],
-            description: '',
+            description: {
+                value: '',
+                validateOnChange: false,
+                error: ''
+            },
             submitCalled:false,
             allFieldsValidated: false,
             resetInput: false,
-            isfulfilled: this.props.isfulfilled
+            isfulfilled: this.props.isfulfilled,
+            isProcess: false
         }
     }
 
@@ -68,42 +74,74 @@ class SellingProduct extends React.Component{
                 error: ''
             },
             images:[],
-            description: '',
+            description: {
+                value: '',
+                validateOnChange: false,
+                error: ''
+            },
+            submitCalled:false,
+            allFieldsValidated: false,
             resetInput:true
         })
     }
 
-    componentDidUpdate=()=> {
+    // componentDidUpdate=()=> {
+    //     if(this.props.product.postProduct.isFulfilled) {
+    //         /**reset form */
+    //         this.resetForm();
+    //     }
+    // }
+
+    handleFormInserProduct = async ()=> {
+        const {namaProduct, unitePrice, stock, images, description} = this.state;
+        console.log(namaProduct, unitePrice, stock, images, description); 
+        this.setState({isProcess: true})
+        let config = `Bearer ${this.props.auth.profile.token}`;
+        let fd = new FormData();
+        fd.append('product_name', namaProduct.value);
+        fd.append('product_description', description.value);
+        fd.append('images', images);  
+        fd.append('product_category', "T-shirt");
+        fd.append('product_price', unitePrice.value);
+        fd.append('disc', 0);
+        fd.append('product_stock', stock.value);
+        //    fd.append('seller', this.props.auth.profile.user_store);
+        fd.append('product_rating', 0);
+        fd.append('product_condition', "baru");
+        fd.append('product_size', "S, XL, L, M, XXL");
+        fd.append('product_color', "020202, B82222, 151867, FFFFFF");
+        await this.props.dispatch(postProduct(fd, config))
+        new Response(fd).text().then(console.log)
+        await this.sleep(2000)
+        this.setState({ isProcess: false })
         if(this.props.product.postProduct.isFulfilled) {
-            // this.resetForm()
-            console.log('reset form prd', this.props);
-            console.log('reset isProcess', this.props.isProcess);
+            /**reset form */
+            console.log('isFulfilled');
+            this.resetForm();
+        }else{
+            console.log('unFulfilled');
         }
     }
 
-    handleSubmit=(evt)=> { 
-        console.log('handleSubmit',evt);
+    handleSubmit=(evt)=> {  
         evt.preventDefault();
         // validate all fields
         const {namaProduct, unitePrice, stock, images, description } = this.state
         const namaProductError = validateFields.validateName(namaProduct.value);
-        const unitePriceError = validateFields.validateName(unitePrice.value);
-        const stockError = validateFields.validateName(stock.value);
+        const unitePriceError = validateFields.validatePrice(unitePrice.value);
+        const stockError = validateFields.validateStok(stock.value);
         const imagesError = images.length<=0 ? true : false;
-        const descriptionError = description.length<=0 ? true : false;
+        const descriptionError = validateFields.validateText(description.value);
         if ([namaProductError, unitePriceError,stockError, imagesError, descriptionError].every(e => e === false)) {
           // no errors submit the form
           console.log('success');
           let AinitialState = this.state
-    
           // clear state and show all fields are validated
           this.setState({ ...AinitialState, allFieldsValidated: true });
           this.showAllFieldsValidated();
-          this.props.handleFormInserProduct(this.state.products)
-        } else {
-          // update the state with errors
-          console.log('canceled', this.state);
-
+          this.handleFormInserProduct()
+        } else { 
+            // console.log(namaProductError, unitePriceError,stockError, imagesError, descriptionError);
           this.setState(state => ({
             namaProduct: {
                 ...state.namaProduct,
@@ -120,6 +158,11 @@ class SellingProduct extends React.Component{
                 validateOnChange: true,
                 error: stockError
             }, 
+            description:{
+                ...state.description,
+                validateOnChange: true,
+                error: descriptionError
+            }
           })); 
         }
     }
@@ -151,14 +194,7 @@ class SellingProduct extends React.Component{
           }));
         }
         return;
-    }
-
-    handleInput = (e) => {
-        let updateValues = { ...this.state.products };
-        updateValues[e.target.name] = e.target.value;
-        this.setState({products: updateValues});
-        console.log("Update input values", updateValues);
-    };
+    } 
 
     handleChange=(validationFunc, evt) => {
         const field = evt.target.name;
@@ -169,43 +205,38 @@ class SellingProduct extends React.Component{
             value: fieldVal,
             error: state[field]['validateOnChange'] ? validationFunc(fieldVal) : ''
           }
-        }));
-        this.handleInput(evt)
+        })); 
     }
 
-    handleMultipleImages = (e) => {
-        console.log("handleMultipleImages",e.target.files);
-        // if (e.length > 0) {
+    handleMultipleImages = (e) => { 
         let updateValues = { ...this.state.products };
         updateValues.images = e.target.files;
         this.setState({
             images: e.target.files,
             products: updateValues
-        });
-        console.log("Update input values", updateValues);
-        // }
+        }); 
     };
 
-    handleDeskription=(val)=>{
-        let updateValues = { ...this.state.products };
-        updateValues.description = val;
-        this.setState({
-            description:val,
-            products: updateValues
-        });
-        console.log("Update input values", updateValues);
+    handleDeskription=(val)=>{ 
+        const field = "description";
+        const fieldVal = val;
+        this.setState(state => ({
+          [field]: {
+            ...state[field],
+            value: fieldVal,
+            error: state[field]['validateOnChange'] ? validateFields.validateText(fieldVal) : ''
+          }
+        }));
     } 
 
-    componentDidMount = async () => {
-        console.log('props:', this.props);
+    componentDidMount = async () => { 
+        
     }
 
     render() {
-        const {namaProduct, stock, unitePrice, images, description } = this.state
-        // console.log(namaProduct, stock, unitePrice, images, description);
+        const {namaProduct, stock, unitePrice, images, description, isProcess, resetInput } = this.state
         return (
-          <form onSubmit={evt => this.handleSubmit(evt)} enctype="multipart/form-data">
-            {/* { this.renderChildren(this.props.children) } */}
+          <form onSubmit={evt => this.handleSubmit(evt)} encType="multipart/form-data">
             <Inventory>
                 <input
                     type="text"
@@ -216,8 +247,7 @@ class SellingProduct extends React.Component{
                         'form-control p-2 text-capitalize',
                         { 'is-valid': namaProduct.error === false },
                         { 'is-invalid': namaProduct.error }
-                      )}
-                    required
+                      )} 
                     onChange={evt =>this.handleChange(validateFields.validateName, evt)}
                     onBlur={evt => this.handleBlur(validateFields.validateName, evt)}/>
                 <div className="bg-transparent invalid-feedback mb-4">{namaProduct.error}</div>
@@ -234,10 +264,9 @@ class SellingProduct extends React.Component{
                             'form-control p-2 text-capitalize',
                             { 'is-valid': unitePrice.error === false },
                             { 'is-invalid': unitePrice.error }
-                          )}
-                        required
-                        onChange={evt =>this.handleChange(validateFields.validateName, evt)}
-                        onBlur={evt => this.handleBlur(validateFields.validateName, evt)}/>
+                          )} 
+                        onChange={evt =>this.handleChange(validateFields.validatePrice, evt)}
+                        onBlur={evt => this.handleBlur(validateFields.validatePrice, evt)}/>
                     <div className="bg-transparent invalid-feedback mb-4">{unitePrice.error}</div>
                 </div><br/>
                 <div className="sc1-input">
@@ -251,25 +280,14 @@ class SellingProduct extends React.Component{
                             'form-control p-2 text-capitalize',
                             { 'is-valid': stock.error === false },
                             { 'is-invalid': stock.error }
-                          )}
-                        required
-                        onChange={evt =>this.handleChange(validateFields.validateName, evt)}
-                        onBlur={evt => this.handleBlur(validateFields.validateName, evt)}/>
+                          )} 
+                        onChange={evt =>this.handleChange(validateFields.validateStok, evt)}
+                        onBlur={evt => this.handleBlur(validateFields.validateStok, evt)}/>
                     <div className="bg-transparent invalid-feedback mb-4">{stock.error}</div>
                 </div>
             </ItemDetails>
-            <PhotoOfGoods setImages={this.handleMultipleImages}/> 
-            {/* <div>
-                <input 
-                    className="form-control"
-                    type="file"  
-                    name="images" 
-                    multiple 
-                    accept="image/*"
-                    onChange={evt=>this.handleMultipleImages(evt)}
-                />
-            </div> */}
-            <Description setDescription={this.handleDeskription}/> 
+            <PhotoOfGoods setImages={this.handleMultipleImages} _resetInput={resetInput}/>  
+            <Description setDescription={this.handleDeskription} _resetInput={resetInput}/> 
             <div className="position-relative wrap-right-content" 
             style={{
                 flexDirection: "row",
@@ -279,7 +297,8 @@ class SellingProduct extends React.Component{
             }}>
                 <button type="submit" className="btn btn-primary" 
                     disabled={false}
-                    onMouseDown={() => this.setState({ submitCalled: true })}>Save
+                    onMouseDown={() => this.setState({ submitCalled: true })}>
+                        {isProcess=== true ? 'Posting...' : 'Save'}
                 </button>
             </div>
           </form>
@@ -289,7 +308,7 @@ class SellingProduct extends React.Component{
 
 const Description = ({ 
     setDescription,
-    children 
+    _resetInput
 }) => {
     let _contentState = ContentState.createFromText('Sample content state');
     const raw = convertToRaw(_contentState)
@@ -309,23 +328,18 @@ const Description = ({
         setDescription(currentContentAsHTML)
     }
 
+    React.useEffect(()=>{
+        if(_resetInput === true) {
+            setEditorState(() => EditorState.createEmpty())
+            convertContentToHTML();
+        }
+    },[_resetInput])
+
     const createMarkup = (html) => {
         return  {
           __html: DOMPurify.sanitize(html)
         }
-    }
-
-    // if(resetForm){
-    //     setStoreDescription('')
-    //     setDescription('')
-    // }
-
-    // React.useEffect(()=>{ 
-    //     if(resetForm){
-    //         setStoreDescription('')
-    //         setDescription('')
-    //     }
-    // },[storeDescription, resetForm, setDescription])
+    } 
 
     return(
     <div className="wrap-right-content">
@@ -338,17 +352,19 @@ const Description = ({
                 defaultContentState={contentState}
                 editorState={editorState}
                 onEditorStateChange={handleEditorChange}
-                wrapperClassName="wrapper-class"
-                // editorClassName="editor-class"
+                wrapperClassName="wrapper-class" 
                 editorClassName = {classnames(
                     'editor-class form-control',
                     { 'is-valid': storeDescription.length > 50 ? true : false },
-                    { 'is-invalid':storeDescription.length < 50 ? true : false }
+                    { 'is-invalid':storeDescription.length > 1 && storeDescription.length < 50 ? true : false }
                   )}
                 toolbarClassName="toolbar-class"
                 />
+            {storeDescription.length > 1 && storeDescription.length < 50 ?  
+                (<div className="bg-transparent invalid-feedback mb-4 d-flex">this field should minimal 50 characters</div>)
+                : null
+            }
         </div>
-        {/* <div className="preview" dangerouslySetInnerHTML={createMarkup(storeDescription)}></div> */}
     </div>
     )
 }
@@ -389,11 +405,11 @@ const ItemDetails = ({ children }) => {
 
 const PhotoOfGoods = ({ 
     setImages,
-    children 
+    _resetInput 
 }) => {
     const hiddenImagesInput = React.useRef(null);
     const [previewImages, setPreviewImages] = React.useState([]);
-    const [selectedFiles, setSelectedFiles] = React.useState(undefined);
+    // const [selectedFiles, setSelectedFiles] = React.useState(undefined);
 
     const handleChangeImage = event => {
         setImages(event)
@@ -402,23 +418,18 @@ const PhotoOfGoods = ({
         for (let i = 0; i < event.target.files.length; i++) {
             images.push(URL.createObjectURL(event.target.files[i]))
         }
-        setPreviewImages(images)
-        // setSelectedFiles(event.target.files)
+        setPreviewImages(images) 
     };
 
     const handleClickSelectImage = event => {
         hiddenImagesInput.current.click();
     };
-
-    React.useEffect(()=>{ 
-        console.log(selectedFiles);
-    }, [selectedFiles])
-
-    // React.useEffect(()=>{ 
-    //     if(resetForm){
-    //         setPreviewImages([])
-    //     }
-    // }, [resetForm])
+    
+    React.useEffect(()=>{
+        if(_resetInput === true) { 
+            setPreviewImages([]) 
+        }
+    },[_resetInput])
 
     return (
     <div className="wrap-right-content">
@@ -548,7 +559,11 @@ const PhotoOfGoods = ({
 
 const mapStateToProps = (state) => {
     return {
-      product: state.product
+        auth: state.auth,
+        product: state.product,
+        checkout: state.checkout,
+        ongkir: state.ongkir,
+        user: state.user,
     };
 };
   

@@ -8,9 +8,9 @@ const initialState = {
     filterIsDiscard: true
   }
   
-export default function (state = initialState, action) {
+export default function (state = initialState, action) { 
     switch (action.type) { 
-        case 'FILTER_APPLY':
+        case 'FILTER_APPLY': 
             return {
                 ...state,  
                 colors: action.payload.colors,

@@ -6,6 +6,7 @@ import {
     TabButton,
     TabPanel,
   } from '../layout/Tabs';
+import AllSeleersItems from './AllSeleersItems';
 
 const MyProduct = (props) => {
  
@@ -29,7 +30,7 @@ const MyProduct = (props) => {
                 </TabList>
     
                 <TabPanel>
-                <p>All items</p>
+                    <AllSeleersItems {...props}/>
                 </TabPanel>
                 <TabPanel>
                 <p>Sould paid</p>

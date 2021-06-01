@@ -99,7 +99,7 @@ class Profile extends React.Component{
    * section selling product
    */
 
-   handleFormInserProduct = async (data)=> {
+  handleFormInserProduct = async (data)=> {
      console.log('handleFormInserProduct ',data);
     this.setState({isProcess: true})
     let config = `Bearer ${this.state.token}`;
@@ -121,7 +121,7 @@ class Profile extends React.Component{
     this.setState({
       isProcess: false
     })
-   }
+  }
 
   /**
    * end section selling product
@@ -178,29 +178,7 @@ class Profile extends React.Component{
         cities:destinations
       })
     }
-	} 
-
-  /**
-   * handle save or update store form
-   * @param {tb_store} data 
-   */
-
-  handleSaveMyStore = async (data) => {
-    console.log(data);
-    this.setState({isProcess: true})
-    let config = `Bearer ${this.state.token}`;
-    let formData = new FormData();
-    formData.append('store_name', data.store_name );
-    formData.append('email', data.email);
-    formData.append('phone_number', data.phone_number);
-    formData.append('store_description', data.store_description); 
-    formData.append('image', data.store_image); 
-    await this.props.dispatch(createMyStore(formData, config)); 
-    await this.props.dispatch(getMyStore(config))
-    await this.sleep(2000)
-    this.setState({isProcess: false})
-  }
-
+	}  
   /**
    * handle submit form user: add or update 
    * @param {user_name, user_email, user_phone, dll...} data 
@@ -331,8 +309,8 @@ class Profile extends React.Component{
       await this.token() 
       await this.myAccount()
       await this.getUserAddress()
-      await this.getPropinsi()
       await this.getMyStore()
+      await this.getPropinsi()
     }
   }
 
@@ -351,8 +329,10 @@ class Profile extends React.Component{
                 <Tab> <TabButton><img src={Clipboard1} alt="asdf" width="32" height="32"/><span> My order</span></TabButton>  </Tab>  
               </TabList>
               <TabPanel>
+                <div className="mt-5 mb-5 p-2"/>
                 <MyProfile handleSaveMyAccount={this.handleSaveMyAccount} userData={this.state.myAccount} progressStatus={this.state.isProcess} /> </TabPanel>
               <TabPanel>
+                <div className="mt-5 mb-5 p-2"/>
                 {!this.state.loadUserAddress || !this.state.loadPropinsi ? ( 
                   <Address userData={this.state.myAccount} loadUserAddress={this.state.loadUserAddress} userAddress={this.state.userAddress} handleOpenModal={this.handleOpenModal} modalIsOpenAddress={this.state.showModal} afterOpenModal={this.afterOpenModal} closeModalAddAddress={this.handleCloseModal} customStyles={customStyles} dataPropinsi={this.state.propinsi} modalIsOpenPropinsi={this.state.showPropinsiModal} handleOpenModalPropinsi={this.handleOpenModalPropinsi} handleCloseModalPropinsi={this.handleCloseModalPropinsi} selectedState={this.state.selectedState} handleChangeState={this.handleChangeState} loadCitiesByState={this.state.loadCitiesByState} cities={this.state.cities} selectedCity={this.state.selectedCity} handleChangeCity={this.handleChangeCity} selectedCityOrSubdistrict={this.state.cityOrSubdistrict} handleSubmitFormAddress={this.handleSubmitFormAddress} progressStatus={this.state.isProcess} />
                 ):(
@@ -360,6 +340,7 @@ class Profile extends React.Component{
                 )}
               </TabPanel>
               <TabPanel>
+                <div className="mt-5 mb-5 p-2"/>
                 <MyOrder/>
               </TabPanel> 
             </Tabs>  
@@ -391,22 +372,19 @@ class Profile extends React.Component{
                 </MyTab>
               </MyTabList>
               <TabPanel _id={"11"}>
+                <div className="mt-5"/>
                 <MyStore 
                   userData={this.props.auth.profile}
                   userStore= {this.state.userStore}
-                  fetcing={this.state.isProcess}
-                  progressStatus={this.state.loadUserStore}   
-                  handleSaveMyStore={this.handleSaveMyStore}/> 
-                  {/* <p>asasas</p>
-                  <form onSubmit={evt => this.handleFormInserProduct(evt)} enctype="multipart/form-data">
-                    <input type="file" name="multi-files" accept='image/*' multiple/>
-                    <input type="submit" value="Upload"/>
-                  </form>   */}
+                  handleSaveMyStore= {this.handleSaveMyStore}/> 
+                  {/* <p>asasas</p>  */}
               </TabPanel>
               <TabPanel _id={"21"}>
+                <div className="mt-5"/>
                 <MyProduct/>
               </TabPanel>
               <TabPanel _id={"22"}>
+                <div className="mt-5"/>
                 <SellingProduct 
                   handleFormInserProduct={this.handleFormInserProduct}  
                   isProcess={this.state.isProcess}
@@ -414,9 +392,11 @@ class Profile extends React.Component{
                   />
               </TabPanel>
               <TabPanel _id={"31"}>
+                <div className="mt-5"/>
                 <OrderSeller selected={0}/>
               </TabPanel>
               <TabPanel _id={"32"}>
+                <div className="mt-5"/>
                 <OrderSeller selected={5}/>
               </TabPanel> 
             </MyTabs>

@@ -3,6 +3,42 @@ import axios from 'axios';
 require('dotenv').config();
 const react_app_url = process.env.REACT_APP_URL; //'http://localhost:8001/api/v1';
 
+export const getProductsBySeller = (data)=>{
+  const secondary_params = `&seller=${data.seller}`;
+  const order_by= data.order_by || 'added_at'
+  const sort= data.sort || 'ASC'
+  const limit= data.limit || 10
+  const page= data.page || 1 
+  return {
+    type: 'SELLERS_PRODUCTS',
+    payload: axios({
+      method: 'GET',
+      url: `${react_app_url}/products?order_by=${order_by}&sort=${sort}&limit=${limit}&page=${page}${secondary_params}`,
+    }),
+  };
+}
+
+export const searchProducts = (data) => {
+  let secondary_params = data.product_name !== undefined ? `&product_name=${data.product_name}` : '';
+  secondary_params = data.product_category !== undefined ? secondary_params + `&product_category=${data.product_category}` : secondary_params;
+  secondary_params = data.seller !== undefined ? secondary_params + `&seller=${data.seller}` : secondary_params;
+  secondary_params = data.product_condition !== undefined ? secondary_params + `&product_condition=${data.product_condition}` : secondary_params;
+  const order_by= data.order_by || 'added_at'
+  const sort= data.sort || 'ASC'
+  const limit= data.limit || 10
+  const page= data.page || 1 
+
+  // console.log('@SEARCH_PRODUCTS PARAMS : ', secondary_params);
+
+    return {
+      type: 'SEARCH_PRODUCTS',
+      payload: axios({
+        method: 'GET',
+        url: `${react_app_url}/products?order_by=${order_by}&sort=${sort}&limit=${limit}&page=${page}${secondary_params}`,
+      }),
+    };
+}
+
 export const getProducts = (data) => { 
   let secondary_params = data.product_name !== undefined ? `&product_name=${data.product_name}` : '';
   secondary_params = data.product_category !== undefined ? secondary_params + `&product_category=${data.product_category}` : secondary_params;
@@ -13,7 +49,7 @@ export const getProducts = (data) => {
   const limit= data.limit || 10
   const page= data.page || 1 
 
-  console.log('@secondary_params : ', secondary_params);
+  // console.log('@secondary_params : ', secondary_params);
 
     return {
       type: 'GETPRODUCTS',
@@ -41,8 +77,8 @@ export const getProductById = (id) => {
         method: 'POST',
         url: `${react_app_url}/products`,
         headers: {
-          Authorization: config,
-          'content-type': 'multipart/form-data'
+          'Authorization': config,
+          'Content-Type': 'multipart/form-data'
         },
         data: fd,
       }),

@@ -13,10 +13,10 @@ class ValidateFields {
    * Validates it
    * Returns the response either error or false if there is no error
    */
-  validateTitle(save_address_as) {
-    if (validator.isEmpty(save_address_as)) {
+  validateTitle(str) {
+    if (validator.isEmpty(str)) {
       return 'this field is required';
-    } else if (!validator.isLength(save_address_as)) {
+    } else if (!validator.isAlphanumeric(str, 'en-US', " - '")) {
       return 'Invalid value';
     }
     return false;
@@ -31,30 +31,68 @@ class ValidateFields {
     return false;
   }
 
+  validateEmail(value) {
+    if (validator.isEmpty(value)) {
+      return 'this field is required';
+    } else if (!validator.isEmail(value)) {
+      return 'Invalid email';
+    }
+    return false;
+  }
+
+  validatePrice(price){
+    if (validator.isEmpty(price)) {
+        return 'this field is required';
+        // isNumeric(str [, options])
+      } else if (!validator.isCurrency(price)) {
+        return 'Invalid price';
+      }
+      return false;
+  }
+
+  validateStok(stok){
+    if (validator.isEmpty(stok)) {
+        return 'this field is required';
+        // isNumeric(str [, options])
+      } else if (!validator.isNumeric(stok)) {
+        return 'Invalid Stok';
+      }
+      return false;
+  }
+
   validatePhone(recipient_phone_number){
     if (validator.isEmpty(recipient_phone_number)) {
-        return 'recipient_phone_number is required';
-      } else if (!validator.isLength(recipient_phone_number, { min: 10 })) {
-        return 'partisipant sould be minimum 10 characters';
+        return 'this field is required';
+        // isNumeric(str [, options])
+      } else if (!validator.isNumeric(recipient_phone_number)) {
+        return 'Invalid phone number';
       }
       return false;
   }
 
   validateAddress(addresS){
     if (validator.isEmpty(addresS)) {
-        return 'addresS is required';
+        return 'this field is required';
       } else if (!validator.isLength(addresS, { min: 10})) {
-        return 'addresS sould be minimum 10 characters';
+        return 'this field sould be minimum 10 characters';
       }
       return false;
   }
 
-  
   validatePos(postal_code){
     if (validator.isEmpty(postal_code)) {
-        return 'postal_code is required';
+        return 'this field is required';
       } else if (!validator.isLength(postal_code, { min: 4 })) {
-        return 'postal_code sould be minimum 4 characters';
+        return 'this field sould be minimum 4 characters';
+      }
+      return false;
+  }
+
+  validateText(value){
+    if (validator.isEmpty(value)) {
+        return 'this field is required';
+      } else if (!validator.isLength(value, { min: 50 })) {
+        return 'this field sould be minimum 50 characters';
       }
       return false;
   }

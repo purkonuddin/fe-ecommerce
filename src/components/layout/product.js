@@ -28,7 +28,7 @@ class Product extends Component {
   }
 
   render() {
-    const { searchTerm, product, sortBy, filter} = this.props;
+    const { searchTerm, product, sortBy, filter, data} = this.props;
     if (product.isFulfilled && sortBy === 'product_rating') {
       product.getProducts.data.sort((a, b) => (a.product_rating < b.product_rating) ? 1 : -1)
     }
@@ -138,4 +138,4 @@ const WrapProduct = (props) => {
       </div>
     </>
   )
-}
+} 
